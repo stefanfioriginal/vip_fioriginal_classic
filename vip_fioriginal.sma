@@ -54,9 +54,9 @@ public vip_menu(id)
 			menu_additem(menu, "AWP+DEAGLE+SET GRENAZI", "3", ADMIN_LEVEL_F )
 		}
 	}
-		menu_setprop (menu, MPROP_EXIT, MEXIT_ALL)
-		menu_display (id, menu, 0)
-		return 1;
+	menu_setprop (menu, MPROP_EXIT, MEXIT_ALL)
+	menu_display (id, menu, 0)
+	return 1;
 }
 
 public menu_ammunition ( id, menu, item ) 
