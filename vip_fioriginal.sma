@@ -4,10 +4,12 @@
 #include <hamsandwich>
 #include <engine>
 
+#pragma semicolon 1
+
 new cvar_tag, cvar_start_hp, cvar_start_ap, cvar_start_money, cvar_vip_jump, cvar_hp_kill, cvar_ap_kill;
 
-new jumpnum[ 33 ]
-new bool: dojump[ 33 ]
+new jumpnum[ 33 ];
+new bool: dojump[ 33 ];
 
 public plugin_init() 
 {
@@ -16,11 +18,11 @@ public plugin_init()
 	RegisterHam(Ham_Spawn, "player", "Spawn", 1);
 	
 	register_clcmd("say /vmenu","vip_menu", -1)
-	register_clcmd("say /vip","vip_info")
+	register_clcmd("say /vip","vip_info");
 	register_clcmd("say", "handle_say");
 	register_clcmd("say_team", "handle_say");
 	
-	set_task(120.0, "mesaj_info", _, _, _, "b")
+	set_task(120.0, "mesaj_info", _, _, _, "b");
 	
 	register_event( "DeathMsg", "eDeathMsg", "a" );
 	
@@ -35,37 +37,37 @@ public plugin_init()
 
 public vip_menu(id)
 {
-	new menu
+	new menu;
 	switch( cs_get_user_team( id ))
 	{
 		case CS_TEAM_CT:
 		{
-			menu = menu_create( "Meniu VIP Counter-Terrorists", "menu_ammunition" )
-			menu_additem(menu, "M4A1+DEAGLE+SET GRENAZI", "1", ADMIN_LEVEL_F )
-			menu_additem(menu, "FAMAS+DEAGLE+SET GRENAZI", "2", ADMIN_LEVEL_F )
-			menu_additem(menu, "AWP+DEAGLE+SET GRENAZI", "3", ADMIN_LEVEL_F )
+			menu = menu_create( "Meniu VIP Counter-Terrorists", "menu_ammunition" );
+			menu_additem(menu, "M4A1+DEAGLE+SET GRENAZI", "1", ADMIN_LEVEL_F );
+			menu_additem(menu, "FAMAS+DEAGLE+SET GRENAZI", "2", ADMIN_LEVEL_F );
+			menu_additem(menu, "AWP+DEAGLE+SET GRENAZI", "3", ADMIN_LEVEL_F );
 		}
 	
 		case CS_TEAM_T:
 		{
-			menu = menu_create( "Meniu VIP Terrorists", "menu_ammunition" )
-			menu_additem(menu, "AK47+DEAGLE+SET GRENAZI", "1", ADMIN_LEVEL_F )
-			menu_additem(menu, "GALIL+DEAGLE+SET GRENAZI", "2", ADMIN_LEVEL_F )
-			menu_additem(menu, "AWP+DEAGLE+SET GRENAZI", "3", ADMIN_LEVEL_F )
+			menu = menu_create( "Meniu VIP Terrorists", "menu_ammunition" );
+			menu_additem(menu, "AK47+DEAGLE+SET GRENAZI", "1", ADMIN_LEVEL_F );
+			menu_additem(menu, "GALIL+DEAGLE+SET GRENAZI", "2", ADMIN_LEVEL_F );
+			menu_additem(menu, "AWP+DEAGLE+SET GRENAZI", "3", ADMIN_LEVEL_F );
 		}
 	}
-	menu_setprop (menu, MPROP_EXIT, MEXIT_ALL)
-	menu_display (id, menu, 0)
-	return 1;
+	menu_setprop (menu, MPROP_EXIT, MEXIT_ALL);
+	menu_display (id, menu, 0);
+	return PLUGIN_CONTINUE;
 }
 
 public menu_ammunition ( id, menu, item ) 
 {
 	new tag[ 32 ];
-	get_pcvar_string( cvar_tag, tag, 31 );
+	get_pcvar_string( cvar_tag, tag, charsmax(tag) );
 	
 	if( item == MENU_EXIT )
-		return 1;
+		return PLUGIN_CONTINUE;
 	
 	new data[6], szName[64];
 	new access, callback;
@@ -81,9 +83,9 @@ public menu_ammunition ( id, menu, item )
 				give_item(id, "weapon_hegrenade");
 				give_item(id, "weapon_flashbang");
 				give_item(id, "weapon_smokegrenade");
-				cs_set_user_bpammo (id , CSW_HEGRENADE , 1 )
-				cs_set_user_bpammo (id , CSW_FLASHBANG , 2 )
-				cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 )
+				cs_set_user_bpammo (id , CSW_HEGRENADE , 1 );
+				cs_set_user_bpammo (id , CSW_FLASHBANG , 2 );
+				cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 );
 				cs_set_user_bpammo(id, CSW_M4A1, 90);
 				cs_set_user_bpammo(id, CSW_DEAGLE, 35);
 				ColorChat(id, "^x01 [^x03 %s^x01 ]^x04 Ai primit^x03 M4A1+DEAGLE+SET GRENAZI^x04 gratis.",tag);
@@ -95,9 +97,9 @@ public menu_ammunition ( id, menu, item )
 				give_item(id, "weapon_hegrenade");
 				give_item(id, "weapon_flashbang");
 				give_item(id, "weapon_smokegrenade");
-				cs_set_user_bpammo (id , CSW_HEGRENADE , 1 )
-				cs_set_user_bpammo (id , CSW_FLASHBANG , 2 )
-				cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 )
+				cs_set_user_bpammo (id , CSW_HEGRENADE , 1 );
+				cs_set_user_bpammo (id , CSW_FLASHBANG , 2 );
+				cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 );
 				cs_set_user_bpammo(id, CSW_FAMAS, 90);
 				cs_set_user_bpammo(id, CSW_DEAGLE, 35);
 				ColorChat(id, "^x01 [^x03 %s^x01 ]^x04 Ai primit^x03 FAMAS+DEAGLE+SET GRENAZI^x04 gratis.",tag);
@@ -109,9 +111,9 @@ public menu_ammunition ( id, menu, item )
 				give_item(id, "weapon_hegrenade");
 				give_item(id, "weapon_flashbang");
 				give_item(id, "weapon_smokegrenade");
-				cs_set_user_bpammo (id , CSW_HEGRENADE , 1 )
-				cs_set_user_bpammo (id , CSW_FLASHBANG , 2 )
-				cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 )
+				cs_set_user_bpammo (id , CSW_HEGRENADE , 1 );
+				cs_set_user_bpammo (id , CSW_FLASHBANG , 2 );
+				cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 );
 				cs_set_user_bpammo(id, CSW_AWP, 30);
 				cs_set_user_bpammo(id, CSW_DEAGLE, 35);
 				ColorChat(id, "^x01 [^x03 %s^x01 ]^x04 Ai primit^x03 AWP+DEAGLE+SET GRENAZI^x04 gratis.",tag);
@@ -127,9 +129,9 @@ public menu_ammunition ( id, menu, item )
 				give_item(id, "weapon_hegrenade");
 				give_item(id, "weapon_flashbang");
 				give_item(id, "weapon_smokegrenade");
-				cs_set_user_bpammo (id , CSW_HEGRENADE , 1 )
-				cs_set_user_bpammo (id , CSW_FLASHBANG , 2 )
-				cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 )
+				cs_set_user_bpammo (id , CSW_HEGRENADE , 1 );
+				cs_set_user_bpammo (id , CSW_FLASHBANG , 2 );
+				cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 );
 				cs_set_user_bpammo(id, CSW_AK47, 90);
 				cs_set_user_bpammo(id, CSW_DEAGLE, 35);
 				ColorChat(id, "^x01 [^x03 %s^x01 ]^x04 Ai primit^x03 AK47+DEAGLE+SET GRENAZI^x04 gratis.",tag);
@@ -141,9 +143,9 @@ public menu_ammunition ( id, menu, item )
 				give_item(id, "weapon_hegrenade");
 				give_item(id, "weapon_flashbang");
 				give_item(id, "weapon_smokegrenade");
-				cs_set_user_bpammo (id , CSW_HEGRENADE , 1 )
-				cs_set_user_bpammo (id , CSW_FLASHBANG , 2 )
-				cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 )
+				cs_set_user_bpammo (id , CSW_HEGRENADE , 1 );
+				cs_set_user_bpammo (id , CSW_FLASHBANG , 2 );
+				cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 );
 				cs_set_user_bpammo(id, CSW_GALIL, 90);
 				cs_set_user_bpammo(id, CSW_DEAGLE, 35);
 				ColorChat(id, "^x01 [^x03 %s^x01 ]^x04 Ai primit^x03 GALIL+DEAGLE+SET GRENAZI^x04 gratis.",tag);
@@ -155,16 +157,16 @@ public menu_ammunition ( id, menu, item )
 				give_item(id, "weapon_hegrenade");
 				give_item(id, "weapon_flashbang");
 				give_item(id, "weapon_smokegrenade");
-				cs_set_user_bpammo (id , CSW_HEGRENADE , 1 )
-				cs_set_user_bpammo (id , CSW_FLASHBANG , 2 )
-				cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 )
+				cs_set_user_bpammo (id , CSW_HEGRENADE , 1 );
+				cs_set_user_bpammo (id , CSW_FLASHBANG , 2 );
+				cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 );
 				cs_set_user_bpammo(id, CSW_AWP, 30);
 				cs_set_user_bpammo(id, CSW_DEAGLE, 35);
 				ColorChat(id, "^x01 [^x03 %s^x01 ]^x04 Ai primit^x03 AWP+DEAGLE+SET GRENAZI^x04 gratis.",tag);
 			}      
 		}
 	menu_destroy(menu);
-	return 1;  
+	return PLUGIN_CONTINUE;  
 }
 
 public Spawn(id) 
@@ -172,22 +174,22 @@ public Spawn(id)
 	if (!is_user_alive(id))
 		return;
     
-	new CsTeams:team = cs_get_user_team(id) 
+	new CsTeams:team = cs_get_user_team(id);
 	if(get_user_flags(id) & ADMIN_LEVEL_F) 
 	{
         	switch(team) 
          	{
             		case CS_TEAM_T: 
             		{
-	       			set_user_health(id, get_pcvar_num(cvar_start_hp))
-	       			set_user_armor(id, get_pcvar_num(cvar_start_ap))
-	       			cs_set_user_money(id, get_pcvar_num(cvar_start_money))
+	       			set_user_health(id, get_pcvar_num(cvar_start_hp));
+	       			set_user_armor(id, get_pcvar_num(cvar_start_ap));
+	       			cs_set_user_money(id, get_pcvar_num(cvar_start_money));
 	    		}
             		case CS_TEAM_CT: 
             		{
-                 		set_user_health(id, get_pcvar_num( cvar_start_hp ))
-                 		set_user_armor(id, get_pcvar_num( cvar_start_ap ))
-	         		cs_set_user_money(id, get_pcvar_num( cvar_start_money ))
+                 		set_user_health(id, get_pcvar_num( cvar_start_hp ));
+                 		set_user_armor(id, get_pcvar_num( cvar_start_ap ));
+	         		cs_set_user_money(id, get_pcvar_num( cvar_start_money ));
              		}
 		}
 	}
@@ -197,53 +199,53 @@ public client_putinserver(id)
 { 
 	set_task(2.0, "bun_venit", id);
 	
-	jumpnum[ id ] = 0
-	dojump[ id ] = false
+	jumpnum[ id ] = 0;
+	dojump[ id ] = false;
 }
 
 public client_disconnect( id )	
 {
-	jumpnum[ id ] = 0
-	dojump[ id ] = false
+	jumpnum[ id ] = 0;
+	dojump[ id ] = false;
 }
 
 public client_PreThink( id )
 {
 	if( !is_user_alive( id ) ) 
-		return PLUGIN_CONTINUE
+		return PLUGIN_CONTINUE;
 
-	new BUTON = get_user_button( id )
-	new OLDBUTON = get_user_oldbutton( id )
-	new JUMP_VIP = get_pcvar_num( cvar_vip_jump ) 
+	new BUTON = get_user_button( id );
+	new OLDBUTON = get_user_oldbutton( id );
+	new JUMP_VIP = get_pcvar_num( cvar_vip_jump );
 
 	if( ( BUTON & IN_JUMP ) && !( get_entity_flags( id ) & FL_ONGROUND ) && !( OLDBUTON & IN_JUMP ) )
 		if( ( ( get_user_flags( id ) & ADMIN_LEVEL_F ) && ( jumpnum[ id ] < JUMP_VIP ) ) )
 		{
-			dojump[ id ] = true
-			jumpnum[ id ]++
+			dojump[ id ] = true;
+			jumpnum[ id ]++;
 		}
 
 	if( ( BUTON & IN_JUMP ) && ( get_entity_flags( id ) & FL_ONGROUND ) )
-		jumpnum[ id ] = 0
+		jumpnum[ id ] = 0;
 
-	return PLUGIN_CONTINUE
+	return PLUGIN_CONTINUE;
 }
 
 public client_PostThink( id ) 
 {
 	if( !is_user_alive( id ) ) 
-		return PLUGIN_CONTINUE
+		return PLUGIN_CONTINUE;
 
 	if( dojump[ id ] )
 	{
-		new Float:velocity[ 3 ]	
-		entity_get_vector( id, EV_VEC_velocity, velocity )
-		velocity[ 2 ] = random_float( 265.0, 285.0 )
-		entity_set_vector( id, EV_VEC_velocity, velocity )
-		dojump[ id ] = false
+		new Float:velocity[ 3 ]	;
+		entity_get_vector( id, EV_VEC_velocity, velocity );
+		velocity[ 2 ] = random_float( 265.0, 285.0 );
+		entity_set_vector( id, EV_VEC_velocity, velocity );
+		dojump[ id ] = false;
 	}
 
-	return PLUGIN_CONTINUE
+	return PLUGIN_CONTINUE;
 }
 
 public eDeathMsg( )
@@ -253,35 +255,35 @@ public eDeathMsg( )
 	if(cs_get_user_team(id_Attacker) == CS_TEAM_CT)
 		if(get_user_flags(id_Killer) & ADMIN_LEVEL_F )
 		{
-	        	set_user_health(id_Killer, get_user_health(id_Killer) + get_pcvar_num(cvar_hp_kill))
-        		set_user_armor(id_Killer, get_user_armor(id_Killer) + get_pcvar_num(cvar_ap_kill))
+	        	set_user_health(id_Killer, get_user_health(id_Killer) + get_pcvar_num(cvar_hp_kill));
+        		set_user_armor(id_Killer, get_user_armor(id_Killer) + get_pcvar_num(cvar_ap_kill));
 		}
 
 	if(cs_get_user_team(id_Attacker) == CS_TEAM_T)  
 		if(get_user_flags(id_Killer) & ADMIN_LEVEL_F )
 		{
-        		set_user_health(id_Killer, get_user_health(id_Killer) + get_pcvar_num(cvar_hp_kill))
-        		set_user_armor(id_Killer, get_user_armor(id_Killer) + get_pcvar_num(cvar_ap_kill))
+        		set_user_health(id_Killer, get_user_health(id_Killer) + get_pcvar_num(cvar_hp_kill));
+        		set_user_armor(id_Killer, get_user_armor(id_Killer) + get_pcvar_num(cvar_ap_kill));
 		}
 }
 
 public bun_venit(id) 	
 {
 	new name[32]; 
-	get_user_name(id, name, 31 ); 
+	get_user_name(id, name, charsmax(name) ); 
 	if(get_user_flags(id) & ADMIN_LEVEL_F)   
 		ColorChat(0, "^x04 VIP-ul^x03 %s^x04 s-a conectat. ",name); 
 }
 
 public vip_info(id)
 {
-	show_motd(id, "/addons/amxmodx/configs/vip_info.html")
+	show_motd(id, "/addons/amxmodx/configs/vip_info.html");
 }
 
 public mesaj_info()	
 {
 	new tag[ 32 ];
-	get_pcvar_string( cvar_tag, tag, 31 );
+	get_pcvar_string( cvar_tag, tag, charsmax(tag) );
 	
 	ColorChat(0, "^x01 [^x03 %s^x01 ]^x04 Tastati in chat :^x03 /vip^x04 pentru a vedea beneficiile si pretul vip-ului.",tag);
 }
@@ -295,9 +297,10 @@ public handle_say(id)
 	return PLUGIN_CONTINUE;
 }
 
-public print_adminlist(user) {
+public print_adminlist(user) 
+{
 	new tag[ 32 ];
-	get_pcvar_string( cvar_tag, tag, 31 );
+	get_pcvar_string( cvar_tag, tag, charsmax(tag) );
 	
 	new adminnames[33][32];
 	new message[256];
@@ -306,7 +309,7 @@ public print_adminlist(user) {
 	for(id = 1 ; id <= get_maxplayers() ; id++)
 		if(is_user_connected(id))
 			if(get_user_flags(id) & ADMIN_LEVEL_F)
-				get_user_name(id, adminnames[count++], 31);
+				get_user_name(id, adminnames[count++], charsmax(adminnames[ ]));
     
 	len = format(message, 255, "^x03[ %s ]^x04 VIP-ii online sunt: ",tag);
 	if(count > 0) 
