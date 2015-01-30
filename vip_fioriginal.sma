@@ -9,7 +9,8 @@ new cvar_tag, cvar_start_hp, cvar_start_ap, cvar_start_money, cvar_vip_jump, cva
 new jumpnum[ 33 ]
 new bool: dojump[ 33 ]
 
-public plugin_init() {
+public plugin_init() 
+{
 	register_plugin("Classic VIP-FIROGINAL.RO", "1.2", "StefaN@CSX");
 	
 	RegisterHam(Ham_Spawn, "player", "Spawn", 1);
@@ -32,201 +33,210 @@ public plugin_init() {
 	cvar_ap_kill = register_cvar( "amx_vip_addap", "10" );
 }
 
-public vip_menu(id) {
+public vip_menu(id)
+{
 	new menu
 	switch( cs_get_user_team( id ))
-{
-	case CS_TEAM_CT:
-{
-	menu = menu_create( "Meniu VIP Counter-Terrorists", "menu_ammunition" )
-	menu_additem(menu, "M4A1+DEAGLE+SET GRENAZI", "1", ADMIN_LEVEL_F )
-	menu_additem(menu, "FAMAS+DEAGLE+SET GRENAZI", "2", ADMIN_LEVEL_F )
-	menu_additem(menu, "AWP+DEAGLE+SET GRENAZI", "3", ADMIN_LEVEL_F )
-}
+	{
+		case CS_TEAM_CT:
+		{
+			menu = menu_create( "Meniu VIP Counter-Terrorists", "menu_ammunition" )
+			menu_additem(menu, "M4A1+DEAGLE+SET GRENAZI", "1", ADMIN_LEVEL_F )
+			menu_additem(menu, "FAMAS+DEAGLE+SET GRENAZI", "2", ADMIN_LEVEL_F )
+			menu_additem(menu, "AWP+DEAGLE+SET GRENAZI", "3", ADMIN_LEVEL_F )
+		}
 	
-	case CS_TEAM_T:
+		case CS_TEAM_T:
+		{
+			menu = menu_create( "Meniu VIP Terrorists", "menu_ammunition" )
+			menu_additem(menu, "AK47+DEAGLE+SET GRENAZI", "1", ADMIN_LEVEL_F )
+			menu_additem(menu, "GALIL+DEAGLE+SET GRENAZI", "2", ADMIN_LEVEL_F )
+			menu_additem(menu, "AWP+DEAGLE+SET GRENAZI", "3", ADMIN_LEVEL_F )
+		}
+	}
+		menu_setprop (menu, MPROP_EXIT, MEXIT_ALL)
+		menu_display (id, menu, 0)
+		return 1;
+}
+
+public menu_ammunition ( id, menu, item ) 
 {
-	menu = menu_create( "Meniu VIP Terrorists", "menu_ammunition" )
-	menu_additem(menu, "AK47+DEAGLE+SET GRENAZI", "1", ADMIN_LEVEL_F )
-	menu_additem(menu, "GALIL+DEAGLE+SET GRENAZI", "2", ADMIN_LEVEL_F )
-	menu_additem(menu, "AWP+DEAGLE+SET GRENAZI", "3", ADMIN_LEVEL_F )
-}
-}
-	menu_setprop (menu, MPROP_EXIT, MEXIT_ALL)
-	menu_display (id, menu, 0)
-	return 1;
-}
-public menu_ammunition ( id, menu, item ) {
 	new tag[ 32 ];
 	get_pcvar_string( cvar_tag, tag, 31 );
 	
 	if( item == MENU_EXIT )
-{
-	return 1;
-}
+		return 1;
+	
 	new data[6], szName[64];
 	new access, callback;
 	menu_item_getinfo(menu, item, access, data,charsmax(data), szName,charsmax(szName), callback);
 	new key = str_to_num(data);
 	if( cs_get_user_team( id ) == CS_TEAM_CT )
-	switch(key)
-	{
-	case 1:
-	{
-	give_item(id, "weapon_m4a1");
-	give_item(id, "weapon_deagle");
-	give_item(id, "weapon_hegrenade");
-	give_item(id, "weapon_flashbang");
-	give_item(id, "weapon_smokegrenade");
-	cs_set_user_bpammo (id , CSW_HEGRENADE , 1 )
-	cs_set_user_bpammo (id , CSW_FLASHBANG , 2 )
-	cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 )
-	cs_set_user_bpammo(id, CSW_M4A1, 90);
-	cs_set_user_bpammo(id, CSW_DEAGLE, 35);
-	ColorChat(id, "^x01 [^x03 %s^x01 ]^x04 Ai primit^x03 M4A1+DEAGLE+SET GRENAZI^x04 gratis.",tag);
-}
-	case 2:
-{
-	give_item(id, "weapon_famas");
-	give_item(id, "weapon_deagle");
-	give_item(id, "weapon_hegrenade");
-	give_item(id, "weapon_flashbang");
-	give_item(id, "weapon_smokegrenade");
-	cs_set_user_bpammo (id , CSW_HEGRENADE , 1 )
-	cs_set_user_bpammo (id , CSW_FLASHBANG , 2 )
-	cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 )
-	cs_set_user_bpammo(id, CSW_FAMAS, 90);
-	cs_set_user_bpammo(id, CSW_DEAGLE, 35);
-	ColorChat(id, "^x01 [^x03 %s^x01 ]^x04 Ai primit^x03 FAMAS+DEAGLE+SET GRENAZI^x04 gratis.",tag);
-}
-	case 3:
-{
-	give_item(id, "weapon_awp");
-	give_item(id, "weapon_deagle");
-	give_item(id, "weapon_hegrenade");
-	give_item(id, "weapon_flashbang");
-	give_item(id, "weapon_smokegrenade");
-	cs_set_user_bpammo (id , CSW_HEGRENADE , 1 )
-	cs_set_user_bpammo (id , CSW_FLASHBANG , 2 )
-	cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 )
-	cs_set_user_bpammo(id, CSW_AWP, 30);
-	cs_set_user_bpammo(id, CSW_DEAGLE, 35);
-	ColorChat(id, "^x01 [^x03 %s^x01 ]^x04 Ai primit^x03 AWP+DEAGLE+SET GRENAZI^x04 gratis.",tag);
-}      
-}
+		switch(key)
+		{
+			case 1:
+			{
+				give_item(id, "weapon_m4a1");
+				give_item(id, "weapon_deagle");
+				give_item(id, "weapon_hegrenade");
+				give_item(id, "weapon_flashbang");
+				give_item(id, "weapon_smokegrenade");
+				cs_set_user_bpammo (id , CSW_HEGRENADE , 1 )
+				cs_set_user_bpammo (id , CSW_FLASHBANG , 2 )
+				cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 )
+				cs_set_user_bpammo(id, CSW_M4A1, 90);
+				cs_set_user_bpammo(id, CSW_DEAGLE, 35);
+				ColorChat(id, "^x01 [^x03 %s^x01 ]^x04 Ai primit^x03 M4A1+DEAGLE+SET GRENAZI^x04 gratis.",tag);
+			}
+			case 2:
+			{
+				give_item(id, "weapon_famas");
+				give_item(id, "weapon_deagle");
+				give_item(id, "weapon_hegrenade");
+				give_item(id, "weapon_flashbang");
+				give_item(id, "weapon_smokegrenade");
+				cs_set_user_bpammo (id , CSW_HEGRENADE , 1 )
+				cs_set_user_bpammo (id , CSW_FLASHBANG , 2 )
+				cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 )
+				cs_set_user_bpammo(id, CSW_FAMAS, 90);
+				cs_set_user_bpammo(id, CSW_DEAGLE, 35);
+				ColorChat(id, "^x01 [^x03 %s^x01 ]^x04 Ai primit^x03 FAMAS+DEAGLE+SET GRENAZI^x04 gratis.",tag);
+			}
+			case 3:
+			{
+				give_item(id, "weapon_awp");
+				give_item(id, "weapon_deagle");
+				give_item(id, "weapon_hegrenade");
+				give_item(id, "weapon_flashbang");
+				give_item(id, "weapon_smokegrenade");
+				cs_set_user_bpammo (id , CSW_HEGRENADE , 1 )
+				cs_set_user_bpammo (id , CSW_FLASHBANG , 2 )
+				cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 )
+				cs_set_user_bpammo(id, CSW_AWP, 30);
+				cs_set_user_bpammo(id, CSW_DEAGLE, 35);
+				ColorChat(id, "^x01 [^x03 %s^x01 ]^x04 Ai primit^x03 AWP+DEAGLE+SET GRENAZI^x04 gratis.",tag);
+			}      
+		}
 	if( cs_get_user_team( id ) == CS_TEAM_T )
-	switch(key)
-{
-	case 1:
-{
-	give_item(id, "weapon_ak47");
-	give_item(id, "weapon_deagle");
-	give_item(id, "weapon_hegrenade");
-	give_item(id, "weapon_flashbang");
-	give_item(id, "weapon_smokegrenade");
-	cs_set_user_bpammo (id , CSW_HEGRENADE , 1 )
-	cs_set_user_bpammo (id , CSW_FLASHBANG , 2 )
-	cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 )
-	cs_set_user_bpammo(id, CSW_AK47, 90);
-	cs_set_user_bpammo(id, CSW_DEAGLE, 35);
-	ColorChat(id, "^x01 [^x03 %s^x01 ]^x04 Ai primit^x03 AK47+DEAGLE+SET GRENAZI^x04 gratis.",tag);
-}      
-	case 2:
-{
-	give_item(id, "weapon_galil");
-	give_item(id, "weapon_deagle");
-	give_item(id, "weapon_hegrenade");
-	give_item(id, "weapon_flashbang");
-	give_item(id, "weapon_smokegrenade");
-	cs_set_user_bpammo (id , CSW_HEGRENADE , 1 )
-	cs_set_user_bpammo (id , CSW_FLASHBANG , 2 )
-	cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 )
-	cs_set_user_bpammo(id, CSW_GALIL, 90);
-	cs_set_user_bpammo(id, CSW_DEAGLE, 35);
-	ColorChat(id, "^x01 [^x03 %s^x01 ]^x04 Ai primit^x03 GALIL+DEAGLE+SET GRENAZI^x04 gratis.",tag);
-}
-	case 3:
-{
-	give_item(id, "weapon_awp");
-	give_item(id, "weapon_deagle");
-	give_item(id, "weapon_hegrenade");
-	give_item(id, "weapon_flashbang");
-	give_item(id, "weapon_smokegrenade");
-	cs_set_user_bpammo (id , CSW_HEGRENADE , 1 )
-	cs_set_user_bpammo (id , CSW_FLASHBANG , 2 )
-	cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 )
-	cs_set_user_bpammo(id, CSW_AWP, 30);
-	cs_set_user_bpammo(id, CSW_DEAGLE, 35);
-	ColorChat(id, "^x01 [^x03 %s^x01 ]^x04 Ai primit^x03 AWP+DEAGLE+SET GRENAZI^x04 gratis.",tag);
-}      
-}
+		switch(key)
+		{
+			case 1:
+			{
+				give_item(id, "weapon_ak47");
+				give_item(id, "weapon_deagle");
+				give_item(id, "weapon_hegrenade");
+				give_item(id, "weapon_flashbang");
+				give_item(id, "weapon_smokegrenade");
+				cs_set_user_bpammo (id , CSW_HEGRENADE , 1 )
+				cs_set_user_bpammo (id , CSW_FLASHBANG , 2 )
+				cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 )
+				cs_set_user_bpammo(id, CSW_AK47, 90);
+				cs_set_user_bpammo(id, CSW_DEAGLE, 35);
+				ColorChat(id, "^x01 [^x03 %s^x01 ]^x04 Ai primit^x03 AK47+DEAGLE+SET GRENAZI^x04 gratis.",tag);
+			}      
+			case 2:
+			{
+				give_item(id, "weapon_galil");
+				give_item(id, "weapon_deagle");
+				give_item(id, "weapon_hegrenade");
+				give_item(id, "weapon_flashbang");
+				give_item(id, "weapon_smokegrenade");
+				cs_set_user_bpammo (id , CSW_HEGRENADE , 1 )
+				cs_set_user_bpammo (id , CSW_FLASHBANG , 2 )
+				cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 )
+				cs_set_user_bpammo(id, CSW_GALIL, 90);
+				cs_set_user_bpammo(id, CSW_DEAGLE, 35);
+				ColorChat(id, "^x01 [^x03 %s^x01 ]^x04 Ai primit^x03 GALIL+DEAGLE+SET GRENAZI^x04 gratis.",tag);
+			}
+			case 3:
+			{
+				give_item(id, "weapon_awp");
+				give_item(id, "weapon_deagle");
+				give_item(id, "weapon_hegrenade");
+				give_item(id, "weapon_flashbang");
+				give_item(id, "weapon_smokegrenade");
+				cs_set_user_bpammo (id , CSW_HEGRENADE , 1 )
+				cs_set_user_bpammo (id , CSW_FLASHBANG , 2 )
+				cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 )
+				cs_set_user_bpammo(id, CSW_AWP, 30);
+				cs_set_user_bpammo(id, CSW_DEAGLE, 35);
+				ColorChat(id, "^x01 [^x03 %s^x01 ]^x04 Ai primit^x03 AWP+DEAGLE+SET GRENAZI^x04 gratis.",tag);
+			}      
+		}
 	menu_destroy(menu);
 	return 1;  
 }
 
-public Spawn(id) { 
+public Spawn(id) 
+{ 
 	if (!is_user_alive(id))
-	return;
+		return;
     
 	new CsTeams:team = cs_get_user_team(id) 
-	if(get_user_flags(id) & ADMIN_LEVEL_F) {
-         switch(team) {
-            case CS_TEAM_T: {
-	       set_user_health(id, get_pcvar_num(cvar_start_hp))
-	       set_user_armor(id, get_pcvar_num(cvar_start_ap))
-	       cs_set_user_money(id, get_pcvar_num(cvar_start_money))
-	    }
-            case CS_TEAM_CT: {
-                 set_user_health(id, get_pcvar_num( cvar_start_hp ))
-                 set_user_armor(id, get_pcvar_num( cvar_start_ap ))
-	         cs_set_user_money(id, get_pcvar_num( cvar_start_money ))
-             }
-}
-}
+	if(get_user_flags(id) & ADMIN_LEVEL_F) 
+	{
+        	switch(team) 
+         	{
+            		case CS_TEAM_T: 
+            		{
+	       			set_user_health(id, get_pcvar_num(cvar_start_hp))
+	       			set_user_armor(id, get_pcvar_num(cvar_start_ap))
+	       			cs_set_user_money(id, get_pcvar_num(cvar_start_money))
+	    		}
+            		case CS_TEAM_CT: 
+            		{
+                 		set_user_health(id, get_pcvar_num( cvar_start_hp ))
+                 		set_user_armor(id, get_pcvar_num( cvar_start_ap ))
+	         		cs_set_user_money(id, get_pcvar_num( cvar_start_money ))
+             		}
+		}
+	}
 }
 
-public client_putinserver(id) { 
+public client_putinserver(id) 
+{ 
 	set_task(2.0, "bun_venit", id);
 	
 	jumpnum[ id ] = 0
 	dojump[ id ] = false
 }
 
-public client_disconnect( id ){
+public client_disconnect( id )	
+{
 	jumpnum[ id ] = 0
 	dojump[ id ] = false
 }
 
-public client_PreThink( id ){
-	if( !is_user_alive( id ) ) return PLUGIN_CONTINUE
+public client_PreThink( id )
+{
+	if( !is_user_alive( id ) ) 
+		return PLUGIN_CONTINUE
 
 	new BUTON = get_user_button( id )
 	new OLDBUTON = get_user_oldbutton( id )
 	new JUMP_VIP = get_pcvar_num( cvar_vip_jump ) 
 
 	if( ( BUTON & IN_JUMP ) && !( get_entity_flags( id ) & FL_ONGROUND ) && !( OLDBUTON & IN_JUMP ) )
-	{
 		if( ( ( get_user_flags( id ) & ADMIN_LEVEL_F ) && ( jumpnum[ id ] < JUMP_VIP ) ) )
 		{
 			dojump[ id ] = true
 			jumpnum[ id ]++
 		}
-	}
 
 	if( ( BUTON & IN_JUMP ) && ( get_entity_flags( id ) & FL_ONGROUND ) )
-	{
 		jumpnum[ id ] = 0
-	}
 
 	return PLUGIN_CONTINUE
 }
 
-public client_PostThink( id ) {
-	if( !is_user_alive( id ) ) return PLUGIN_CONTINUE
+public client_PostThink( id ) 
+{
+	if( !is_user_alive( id ) ) 
+		return PLUGIN_CONTINUE
 
-	if( dojump[ id ] == true )
+	if( dojump[ id ] )
 	{
-		new Float: velocity[ 3 ]	
+		new Float:velocity[ 3 ]	
 		entity_get_vector( id, EV_VEC_velocity, velocity )
 		velocity[ 2 ] = random_float( 265.0, 285.0 )
 		entity_set_vector( id, EV_VEC_velocity, velocity )
@@ -236,49 +246,52 @@ public client_PostThink( id ) {
 	return PLUGIN_CONTINUE
 }
 
-public eDeathMsg( ){
+public eDeathMsg( )
+{
 	new id_Killer = read_data( 1 );
 	new id_Attacker = read_data( 2 );
 	if(cs_get_user_team(id_Attacker) == CS_TEAM_CT)
-	if(get_user_flags(id_Killer) & ADMIN_LEVEL_F )
-	{
-        set_user_health(id_Killer, get_user_health(id_Killer) + get_pcvar_num(cvar_hp_kill))
-        set_user_armor(id_Killer, get_user_armor(id_Killer) + get_pcvar_num(cvar_ap_kill))
-	}
+		if(get_user_flags(id_Killer) & ADMIN_LEVEL_F )
+		{
+	        	set_user_health(id_Killer, get_user_health(id_Killer) + get_pcvar_num(cvar_hp_kill))
+        		set_user_armor(id_Killer, get_user_armor(id_Killer) + get_pcvar_num(cvar_ap_kill))
+		}
 
 	if(cs_get_user_team(id_Attacker) == CS_TEAM_T)  
-	if(get_user_flags(id_Killer) & ADMIN_LEVEL_F )
-	{
-        set_user_health(id_Killer, get_user_health(id_Killer) + get_pcvar_num(cvar_hp_kill))
-        set_user_armor(id_Killer, get_user_armor(id_Killer) + get_pcvar_num(cvar_ap_kill))
-	}
+		if(get_user_flags(id_Killer) & ADMIN_LEVEL_F )
+		{
+        		set_user_health(id_Killer, get_user_health(id_Killer) + get_pcvar_num(cvar_hp_kill))
+        		set_user_armor(id_Killer, get_user_armor(id_Killer) + get_pcvar_num(cvar_ap_kill))
+		}
 }
 
-public bun_venit(id) 	{
+public bun_venit(id) 	
+{
 	new name[32]; 
 	get_user_name(id, name, 31 ); 
 	if(get_user_flags(id) & ADMIN_LEVEL_F)   
-	{ 
 		ColorChat(0, "^x04 VIP-ul^x03 %s^x04 s-a conectat. ",name); 
-	}
 }
 
-public vip_info(id){
+public vip_info(id)
+{
 	show_motd(id, "/addons/amxmodx/configs/vip_info.html")
 }
 
-public mesaj_info()	{
+public mesaj_info()	
+{
 	new tag[ 32 ];
 	get_pcvar_string( cvar_tag, tag, 31 );
 	
 	ColorChat(0, "^x01 [^x03 %s^x01 ]^x04 Tastati in chat :^x03 /vip^x04 pentru a vedea beneficiile si pretul vip-ului.",tag);
 }
 
-public handle_say(id) {
+public handle_say(id) 
+{
 	new said[192];
 	read_args(said,192);
 	if(contain(said, "/vips") != -1)
-	set_task(0.1,"print_adminlist",id);
+		set_task(0.1,"print_adminlist",id);
 	return PLUGIN_CONTINUE;
 }
 
@@ -291,38 +304,41 @@ public print_adminlist(user) {
 	new id, count, x, len;
     
 	for(id = 1 ; id <= get_maxplayers() ; id++)
-	if(is_user_connected(id))
-	if(get_user_flags(id) & ADMIN_LEVEL_F)
-	get_user_name(id, adminnames[count++], 31);
+		if(is_user_connected(id))
+			if(get_user_flags(id) & ADMIN_LEVEL_F)
+				get_user_name(id, adminnames[count++], 31);
     
 	len = format(message, 255, "^x03[ %s ]^x04 VIP-ii online sunt: ",tag);
 	if(count > 0) 
 	{
-        for(x = 0 ; x < count ; x++) 
-        {
-            len += format(message[len], 255-len, "%s%s ", adminnames[x], x < (count-1) ? ", ":"");
-            if(len > 96) 
-            {
-                print_message(user, message);
-                len = format(message, 255, " ");
-            }
-        }
-        print_message(user, message);
+        	for(x = 0 ; x < count ; x++) 
+        	{
+            		len += format(message[len], 255-len, "%s%s ", adminnames[x], x < (count-1) ? ", ":"");
+            		if(len > 96) 
+            		{
+                		print_message(user, message);
+                		len = format(message, 255, " ");
+            		}
+        	}
+        	print_message(user, message);
 	}
 	else 
 	{
-	len += format(message[len], 255-len, "^x03[%s]^x04 Nu sunt VIP-i online.", tag);
-	print_message(user, message);
+		len += format(message[len], 255-len, "^x03[%s]^x04 Nu sunt VIP-i online.", tag);
+		print_message(user, message);
 	}   
-	}
-print_message(id, msg[]) {
+}
+
+print_message(id, msg[]) 
+{
 	message_begin(MSG_ONE, get_user_msgid("SayText"), {0,0,0}, id);
 	write_byte(id);
 	write_string(msg);
 	message_end();
 }
 
-stock ColorChat(const id, const input[], any:...) {
+ColorChat(const id, const input[], any:...) 
+{
 	new count = 1, players[32];
 	static msg[191];
 	vformat(msg, 190, input, 3);
@@ -331,15 +347,18 @@ stock ColorChat(const id, const input[], any:...) {
 	replace_all(msg, 190, "^x01", "^1");
 	replace_all(msg, 190, "^x03", "^3");
    
-	if(id) players[0] = id;
-	else get_players(players, count, "ch"); {
-         for(new i = 0; i < count; i++) {
-         if(is_user_connected(players[i])) {
-            message_begin(MSG_ONE_UNRELIABLE, get_user_msgid("SayText"), _, players[i]);
-            write_byte(players[i]);
-            write_string(msg);
-            message_end();
-}
-}
-}
+	if(id) 
+		players[0] = id;
+	else 
+	{
+		get_players(players, count, "ch"); 
+         	for(new i = 0; i < count; i++) 
+		         if(is_user_connected(players[i])) 
+         		{
+            			message_begin(MSG_ONE_UNRELIABLE, get_user_msgid("SayText"), _, players[i]);
+            			write_byte(players[i]);
+            			write_string(msg);
+            			message_end();
+			}
+	}
 }
