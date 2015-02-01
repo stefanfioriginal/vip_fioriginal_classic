@@ -269,7 +269,7 @@ public eDeathMsg( )
 		set_user_health(id_Killer, get_user_health(id_Killer) + get_pcvar_num(cvar_hp_kill));
 		set_user_armor(id_Killer, get_user_armor(id_Killer) + get_pcvar_num(cvar_ap_kill));
 	}
-	return PLUGIN_CONTINUE;
+	return PLUGIN_HANDLED;
 }
 
 public bun_venit(id) 	
