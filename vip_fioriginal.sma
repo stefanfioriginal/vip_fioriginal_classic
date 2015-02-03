@@ -254,20 +254,21 @@ public eDeathMsg( )
 {
 	new id_Killer = read_data( 1 );
 	new id_Attacker = read_data( 2 );
-	if(is_user_alive(id_Attacker))
-		return PLUGIN_HANDLED;
-	if(cs_get_user_team(id_Attacker) == CS_TEAM_CT)
-	if(get_user_flags(id_Killer) & ADMIN_LEVEL_F )
+	if(is_user_alive(id_Killer))
 	{
-		set_user_health(id_Killer, get_user_health(id_Killer) + get_pcvar_num(cvar_hp_kill));
-		set_user_armor(id_Killer, get_user_armor(id_Killer) + get_pcvar_num(cvar_ap_kill));
-	}
+		if(cs_get_user_team(id_Attacker) == CS_TEAM_CT)
+		if(get_user_flags(id_Killer) & ADMIN_LEVEL_F )
+			{
+				set_user_health(id_Killer, get_user_health(id_Killer) + get_pcvar_num(cvar_hp_kill));
+				set_user_armor(id_Killer, get_user_armor(id_Killer) + get_pcvar_num(cvar_ap_kill));
+			}
 
-	if(cs_get_user_team(id_Attacker) == CS_TEAM_T)  
-	if(get_user_flags(id_Killer) & ADMIN_LEVEL_F )
-	{
-		set_user_health(id_Killer, get_user_health(id_Killer) + get_pcvar_num(cvar_hp_kill));
-		set_user_armor(id_Killer, get_user_armor(id_Killer) + get_pcvar_num(cvar_ap_kill));
+		if(cs_get_user_team(id_Attacker) == CS_TEAM_T)
+		if(get_user_flags(id_Killer) & ADMIN_LEVEL_F )
+			{
+				set_user_health(id_Killer, get_user_health(id_Killer) + get_pcvar_num(cvar_hp_kill));
+				set_user_armor(id_Killer, get_user_armor(id_Killer) + get_pcvar_num(cvar_ap_kill));
+			}
 	}
 }
 
