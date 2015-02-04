@@ -11,7 +11,7 @@ new bool: dojump[ 33 ];
 
 public plugin_init() 
 {
-	register_plugin("Classic VIP-FIROGINAL.RO", "1.3", "StefaN@CSX");
+	register_plugin("Classic VIP-FIROGINAL.RO", "1.4", "StefaN@CSX");
 	
 	RegisterHam(Ham_Spawn, "player", "Spawn", 1);
 	
