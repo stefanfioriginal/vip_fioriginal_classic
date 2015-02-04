@@ -280,6 +280,7 @@ public bun_venit(id)
 	{ 
 		ColorChat(0, "^x04 VIP-ul^x03 %s^x04 s-a conectat. ",name); 
 	}
+	return PLUGIN_HANDLED;
 }
 
 public vip_info(id)
