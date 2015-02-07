@@ -142,9 +142,9 @@ public menu_ammunition ( id, menu, item )
 			give_item(id, "weapon_hegrenade");
 			give_item(id, "weapon_flashbang");
 			give_item(id, "weapon_smokegrenade");
-			cs_set_user_bpammo (id , CSW_HEGRENADE , 1 )
-			cs_set_user_bpammo (id , CSW_FLASHBANG , 2 )
-			cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 )
+			cs_set_user_bpammo (id , CSW_HEGRENADE , 1 );
+			cs_set_user_bpammo (id , CSW_FLASHBANG , 2 );
+			cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 );
 			cs_set_user_bpammo(id, CSW_GALIL, 90);
 			cs_set_user_bpammo(id, CSW_DEAGLE, 35);
 			ColorChat(id, "^x01 [^x03 %s^x01 ]^x04 Ai primit^x03 GALIL+DEAGLE+SET GRENAZI^x04 gratis.",tag);
@@ -156,9 +156,9 @@ public menu_ammunition ( id, menu, item )
 			give_item(id, "weapon_hegrenade");
 			give_item(id, "weapon_flashbang");
 			give_item(id, "weapon_smokegrenade");
-			cs_set_user_bpammo (id , CSW_HEGRENADE , 1 )
-			cs_set_user_bpammo (id , CSW_FLASHBANG , 2 )
-			cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 )
+			cs_set_user_bpammo (id , CSW_HEGRENADE , 1 );
+			cs_set_user_bpammo (id , CSW_FLASHBANG , 2 );
+			cs_set_user_bpammo (id , CSW_SMOKEGRENADE , 1 );
 			cs_set_user_bpammo(id, CSW_AWP, 30);
 			cs_set_user_bpammo(id, CSW_DEAGLE, 35);
 			ColorChat(id, "^x01 [^x03 %s^x01 ]^x04 Ai primit^x03 AWP+DEAGLE+SET GRENAZI^x04 gratis.",tag);
