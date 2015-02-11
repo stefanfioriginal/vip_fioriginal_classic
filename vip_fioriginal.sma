@@ -13,7 +13,7 @@ new bool:use[33];
 
 public plugin_init() 
 {
-	register_plugin("Classic VIP-FIROGINAL.RO", "1.4", "StefaN@CSX");
+	register_plugin("Classic VIP-FIROGINAL.RO", "1.5", "StefaN@CSX");
 	
 	RegisterHam(Ham_Spawn, "player", "Spawn", 1);
 	
