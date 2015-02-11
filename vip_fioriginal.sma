@@ -9,6 +9,8 @@ new cvar_tag, cvar_start_hp, cvar_start_ap, cvar_start_money, cvar_vip_jump, cva
 new jumpnum[ 33 ];
 new bool: dojump[ 33 ];
 
+new bool:use[33];
+
 public plugin_init() 
 {
 	register_plugin("Classic VIP-FIROGINAL.RO", "1.4", "StefaN@CSX");
@@ -23,6 +25,7 @@ public plugin_init()
 	set_task(120.0, "mesaj_info", _, _, _, "b");
 	
 	register_event( "DeathMsg", "eDeathMsg", "a" );
+	register_event("HLTV", "Event_NewRound", "a", "1=0", "2=0");
 	
 	cvar_tag = register_cvar("amx_vip_tag","VIP");
 	cvar_start_hp = register_cvar("amx_start_hp","150");
@@ -31,10 +34,25 @@ public plugin_init()
 	cvar_vip_jump = register_cvar( "amx_vip_jump", "1" );
 	cvar_hp_kill = register_cvar( "amx_vip_addhp", "10" );	
 	cvar_ap_kill = register_cvar( "amx_vip_addap", "10" );
+	
+}
+
+public Event_NewRound()
+{
+	arrayset( use, false, 33 );
 }
 
 public vip_menu(id) 
 {
+	new tag[ 32 ];
+	get_pcvar_string( cvar_tag, tag, charsmax(tag) );
+	
+	if( use[id] )
+	{
+		ColorChat(id, "^x01 [^x03 %s^x01 ]^x04 Meniul poate fi folosit doar o data pe runda !",tag);
+		return PLUGIN_HANDLED;
+	}
+	
 	new menu
 	switch( cs_get_user_team( id ))
 	{
@@ -56,6 +74,7 @@ public vip_menu(id)
 	}
 	menu_setprop (menu, MPROP_EXIT, MEXIT_ALL)
 	menu_display (id, menu, 0)
+	use[id] = true;
 	return PLUGIN_HANDLED;
 }
 
