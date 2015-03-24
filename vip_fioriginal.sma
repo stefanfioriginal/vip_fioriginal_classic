@@ -4,6 +4,8 @@
 #include <hamsandwich>
 #include <engine>
 
+#define VIP_LEVEL_ACCES ADMIN_LEVEL_F
+
 new cvar_tag, cvar_start_hp, cvar_start_ap, cvar_start_money, cvar_vip_jump, cvar_hp_kill, cvar_ap_kill;
 
 new jumpnum[ 33 ];
@@ -13,7 +15,7 @@ new bool:use[33];
 
 public plugin_init() 
 {
-	register_plugin("Classic VIP-FIROGINAL.RO", "1.5", "StefaN@CSX");
+	register_plugin("Classic VIP-FIROGINAL.RO", "1.6", "StefaN@CSX");
 	
 	RegisterHam(Ham_Spawn, "player", "Spawn", 1);
 	
@@ -59,17 +61,17 @@ public vip_menu(id)
 		case CS_TEAM_CT:
 		{
 			menu = menu_create( "Meniu VIP Counter-Terrorists", "menu_ammunition" );
-			menu_additem(menu, "M4A1+DEAGLE+SET GRENAZI", "1", ADMIN_LEVEL_F );
-			menu_additem(menu, "FAMAS+DEAGLE+SET GRENAZI", "2", ADMIN_LEVEL_F );
-			menu_additem(menu, "AWP+DEAGLE+SET GRENAZI", "3", ADMIN_LEVEL_F );
+			menu_additem(menu, "M4A1+DEAGLE+SET GRENAZI", "1", VIP_LEVEL_ACCES );
+			menu_additem(menu, "FAMAS+DEAGLE+SET GRENAZI", "2", VIP_LEVEL_ACCES );
+			menu_additem(menu, "AWP+DEAGLE+SET GRENAZI", "3", VIP_LEVEL_ACCES );
 		}
 	
 		case CS_TEAM_T:
 		{
 			menu = menu_create( "Meniu VIP Terrorists", "menu_ammunition" );
-			menu_additem(menu, "AK47+DEAGLE+SET GRENAZI", "1", ADMIN_LEVEL_F );
-			menu_additem(menu, "GALIL+DEAGLE+SET GRENAZI", "2", ADMIN_LEVEL_F );
-			menu_additem(menu, "AWP+DEAGLE+SET GRENAZI", "3", ADMIN_LEVEL_F );
+			menu_additem(menu, "AK47+DEAGLE+SET GRENAZI", "1", VIP_LEVEL_ACCES );
+			menu_additem(menu, "GALIL+DEAGLE+SET GRENAZI", "2", VIP_LEVEL_ACCES );
+			menu_additem(menu, "AWP+DEAGLE+SET GRENAZI", "3", VIP_LEVEL_ACCES );
 		}
 	}
 	menu_setprop (menu, MPROP_EXIT, MEXIT_ALL)
@@ -193,7 +195,7 @@ public Spawn(id)
 		return;
     
 	new CsTeams:team = cs_get_user_team(id) 
-	if(get_user_flags(id) & ADMIN_LEVEL_F) 
+	if(get_user_flags(id) & VIP_LEVEL_ACCES) 
 	{
 		switch(team) 
 	    {
@@ -237,7 +239,7 @@ public client_PreThink( id )
 
 	if( ( BUTON & IN_JUMP ) && !( get_entity_flags( id ) & FL_ONGROUND ) && !( OLDBUTON & IN_JUMP ) )
 	{
-		if( ( ( get_user_flags( id ) & ADMIN_LEVEL_F ) && ( jumpnum[ id ] < JUMP_VIP ) ) )
+		if( ( ( get_user_flags( id ) & VIP_LEVEL_ACCES ) && ( jumpnum[ id ] < JUMP_VIP ) ) )
 		{
 			dojump[ id ] = true
 			jumpnum[ id ]++
@@ -276,14 +278,14 @@ public eDeathMsg( )
 	if(is_user_alive(id_Killer))
 	{
 		if(cs_get_user_team(id_Attacker) == CS_TEAM_CT)
-		if(get_user_flags(id_Killer) & ADMIN_LEVEL_F )
+		if(get_user_flags(id_Killer) & VIP_LEVEL_ACCES )
 			{
 				set_user_health(id_Killer, get_user_health(id_Killer) + get_pcvar_num(cvar_hp_kill));
 				set_user_armor(id_Killer, get_user_armor(id_Killer) + get_pcvar_num(cvar_ap_kill));
 			}
 
 		if(cs_get_user_team(id_Attacker) == CS_TEAM_T)
-		if(get_user_flags(id_Killer) & ADMIN_LEVEL_F )
+		if(get_user_flags(id_Killer) & VIP_LEVEL_ACCES )
 			{
 				set_user_health(id_Killer, get_user_health(id_Killer) + get_pcvar_num(cvar_hp_kill));
 				set_user_armor(id_Killer, get_user_armor(id_Killer) + get_pcvar_num(cvar_ap_kill));
@@ -295,7 +297,7 @@ public bun_venit(id)
 {
 	new name[32]; 
 	get_user_name(id, name, charsmax(name) ); 
-	if(get_user_flags(id) & ADMIN_LEVEL_F)   
+	if(get_user_flags(id) & VIP_LEVEL_ACCES)   
 	{ 
 		ColorChat(0, "^x04 VIP-ul^x03 %s^x04 s-a conectat. ",name); 
 	}
@@ -335,7 +337,7 @@ public print_adminlist(user)
     
 	for(id = 1 ; id <= get_maxplayers() ; id++)
 		if(is_user_connected(id))
-			if(get_user_flags(id) & ADMIN_LEVEL_F)
+			if(get_user_flags(id) & VIP_LEVEL_ACCES)
 				get_user_name(id, adminnames[count++], charsmax(adminnames[ ]));
     
 	len = format(message, 255, "^x03[ %s ]^x04 VIP-ii online sunt: ",tag);
