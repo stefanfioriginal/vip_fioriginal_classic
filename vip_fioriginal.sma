@@ -7,6 +7,11 @@
 
 #define VIP_LEVEL_ACCES ADMIN_LEVEL_F
 
+#define SCOREATTRIB_NONE    0
+#define SCOREATTRIB_DEAD    ( 1 << 0 )
+#define SCOREATTRIB_BOMB    ( 1 << 1 )
+#define SCOREATTRIB_VIP  ( 1 << 2 )
+
 new cvar_tag, cvar_start_hp, cvar_start_ap, cvar_start_money, cvar_vip_jump, cvar_hp_kill, cvar_ap_kill, jumpnum[33], bool: dojump[33], bool:use[33];
 
 public plugin_init() 
@@ -24,7 +29,7 @@ public plugin_init()
 	
 	register_event("DeathMsg", "eDeathMsg", "a");
 	register_event("HLTV", "Event_NewRound", "a", "1=0", "2=0");
-	register_event("ResetHUD", "ResetHUD", "be")
+	register_message( get_user_msgid( "ScoreAttrib" ), "MessageScoreAttrib" );
 	
 	cvar_tag = register_cvar("amx_vip_tag","VIP");
 	cvar_start_hp = register_cvar("amx_start_hp","150");
@@ -364,30 +369,12 @@ print_message(id, msg[])
 	message_end();
 }
 
-public ResetHUD( id )
+public MessageScoreAttrib( iMsgID, iDest, iReceiver ) 
 {
-    set_task( 0.5, "VIP", id + 6910 )
-
-    if ( cs_get_user_team( id ) == CS_TEAM_T )
-    {
-        if ( get_user_weapon( id ) == CSW_C4 )
-        {
-            set_task( 0.6, "Bomb", id + 6910 )            
-        }
-    }
-}
-
-public VIP( TaskID, id )
-{
-    new id = TaskID - 6910
-
-    if ( get_user_flags( id ) & ADMIN_LEVEL_F ) 
-    {
-        message_begin( MSG_ALL, get_user_msgid( "ScoreAttrib" ) )
-        write_byte( id )
-        write_byte( 4 )
-        message_end( )
-    }
-
-    return PLUGIN_HANDLED
+    	new iPlayer = get_msg_arg_int( 1 );
+    	if( is_user_connected( iPlayer )
+    	&& ( get_user_flags( iPlayer ) & VIP_LEVEL_ACCES ) ) 
+		{
+        		set_msg_arg_int( 2, ARG_BYTE, is_user_alive( iPlayer ) ? SCOREATTRIB_VIP : SCOREATTRIB_DEAD );
+    		}
 }  
