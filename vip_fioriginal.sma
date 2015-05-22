@@ -67,7 +67,6 @@ public vip_menu(id)
 			menu_additem(menu, "AWP+DEAGLE+SET GRENAZI", "3", VIP_LEVEL_ACCES );
 		}
 	}
-	menu_display (id, menu, 0)
 	return PLUGIN_HANDLED;
 }
 
