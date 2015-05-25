@@ -53,18 +53,18 @@ public vip_menu(id)
 	{
 		case CS_TEAM_CT:
 		{
-			menu = menu_create( "Meniu VIP Counter-Terrorists", "menu_ammunition" );
-			menu_additem(menu, "M4A1+DEAGLE+SET GRENAZI", "1", VIP_LEVEL_ACCES );
-			menu_additem(menu, "FAMAS+DEAGLE+SET GRENAZI", "2", VIP_LEVEL_ACCES );
-			menu_additem(menu, "AWP+DEAGLE+SET GRENAZI", "3", VIP_LEVEL_ACCES );
+			menu = menu_create( "\y[\rVIP Classic\y] \wMeniu \yVIP \rCounter-Terrorists", "menu_ammunition" );
+			menu_additem(menu, "\rM4A1 \y+ \rDEAGLE \y+ \rSET GRENAZI", "1", VIP_LEVEL_ACCES );
+			menu_additem(menu, "\rFAMAS \y+ \rDEAGLE \y+ \rSET GRENAZI", "2", VIP_LEVEL_ACCES );
+			menu_additem(menu, "\rAWP \y+ \rDEAGLE \y+ \rSET GRENAZI", "3", VIP_LEVEL_ACCES );
 		}
 	
 		case CS_TEAM_T:
 		{
-			menu = menu_create( "Meniu VIP Terrorists", "menu_ammunition" );
-			menu_additem(menu, "AK47+DEAGLE+SET GRENAZI", "1", VIP_LEVEL_ACCES );
-			menu_additem(menu, "GALIL+DEAGLE+SET GRENAZI", "2", VIP_LEVEL_ACCES );
-			menu_additem(menu, "AWP+DEAGLE+SET GRENAZI", "3", VIP_LEVEL_ACCES );
+			menu = menu_create( "\y[\rVIP Classic\y] \wMeniu \yVIP \rTerrorists", "menu_ammunition" );
+			menu_additem(menu, "\rAK47 \y+ \rDEAGLE \y+ \rSET GRENAZI", "1", VIP_LEVEL_ACCES );
+			menu_additem(menu, "\rGALIL \y+ \rDEAGLE \y+ \rSET GRENAZI", "2", VIP_LEVEL_ACCES );
+			menu_additem(menu, "\rAWP \y+ \rDEAGLE \y+ \rSET GRENAZI", "3", VIP_LEVEL_ACCES );
 		}
 	}
 	menu_display(id, menu, 0)
@@ -206,7 +206,7 @@ public Spawn(id)
 		case CS_TEAM_CT: {
 			set_user_health(id, get_pcvar_num( cvar_start_hp ));
 			set_user_armor(id, get_pcvar_num( cvar_start_ap ));
-			cs_set_user_money(id, cs_get_user_money(id) + get_pcvar_num( cvar_start_money ));
+			cs_set_user_money(id, cs_get_user_money(id) + get_pcvar_num(cvar_start_money));
 		}
 	    }
 	}
