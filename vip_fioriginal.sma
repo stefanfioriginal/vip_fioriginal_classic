@@ -61,7 +61,7 @@ public vip_menu(id)
 	
 		case CS_TEAM_T:
 		{
-			menu = menu_create("\y[\rVIP CSX\y] \wMeniu \yVIP", "menu_ammunition");
+			menu = menu_create("\y[\rVIP Classic\y] \wMeniu \yVIP", "menu_ammunition");
 			menu_additem(menu, "Ak47\r+\wDeagle\r+\wSet grenazi", "1");
 			menu_additem(menu, "Galil\r+\wDeagle\r+\wSet grenazi", "2");
 			menu_additem(menu, "Awp\r+\wDeagle\r+\wSet grenazi", "3");
