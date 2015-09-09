@@ -16,7 +16,7 @@ new cvar_tag, cvar_start_hp, cvar_start_ap, cvar_start_money, cvar_vip_jump, cva
 
 public plugin_init() 
 {
-	register_plugin("Classic VIP-FIROGINAL.RO", "1.9", "Devil aKa. StefaN@CSX");
+	register_plugin("Classic VIP-FIROGINAL.RO", "2.0", "Devil aKa. StefaN@CSX");
 	
 	RegisterHam(Ham_Spawn, "player", "Spawn", 1);
 	
@@ -54,17 +54,17 @@ public vip_menu(id)
 		case CS_TEAM_CT:
 		{
 			menu = menu_create("\y[\rVIP Classic\y] \wMeniu \yVIP", "menu_ammunition");
-			menu_additem(menu, "M4a1\r+\wDeagle\r+\wSet grenazi", "1");
-			menu_additem(menu, "Famas\r+\wDeagle\r+\wSet grenazi", "2");
-			menu_additem(menu, "Awp\r+\wDeagle\r+\wSet grenazi", "3");
+			menu_additem(menu, "M4a1\r+\wDeagle\r+\wSet grenazi", "1", VIP_LEVEL_ACCES);
+			menu_additem(menu, "Famas\r+\wDeagle\r+\wSet grenazi", "2", VIP_LEVEL_ACCES);
+			menu_additem(menu, "Awp\r+\wDeagle\r+\wSet grenazi", "3", VIP_LEVEL_ACCES);
 		}
 	
 		case CS_TEAM_T:
 		{
 			menu = menu_create("\y[\rVIP Classic\y] \wMeniu \yVIP", "menu_ammunition");
-			menu_additem(menu, "Ak47\r+\wDeagle\r+\wSet grenazi", "1");
-			menu_additem(menu, "Galil\r+\wDeagle\r+\wSet grenazi", "2");
-			menu_additem(menu, "Awp\r+\wDeagle\r+\wSet grenazi", "3");
+			menu_additem(menu, "Ak47\r+\wDeagle\r+\wSet grenazi", "1", VIP_LEVEL_ACCES);
+			menu_additem(menu, "Galil\r+\wDeagle\r+\wSet grenazi", "2", VIP_LEVEL_ACCES);
+			menu_additem(menu, "Awp\r+\wDeagle\r+\wSet grenazi", "3", VIP_LEVEL_ACCES);
 		}
 	}
 	menu_display(id, menu, 0)
