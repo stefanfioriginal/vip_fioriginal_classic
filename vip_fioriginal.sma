@@ -12,11 +12,22 @@
 #define SCOREATTRIB_BOMB    ( 1 << 1 )
 #define SCOREATTRIB_VIP  ( 1 << 2 )
 
+#define REMOVE_FLAGS "r"
+
+new const RMaps [ ] [ ] =
+{
+	"35hp",
+	"35hp_2",
+	"31hp",
+	"1hp",
+	"100hp"	
+};
+
 new cvar_tag, cvar_start_hp, cvar_start_ap, cvar_start_money, cvar_vip_jump, cvar_hp_kill, cvar_ap_kill, jumpnum[33], bool: dojump[33], bool:use[33];
 
 public plugin_init() 
 {
-	register_plugin("Classic VIP-FIROGINAL.RO", "2.0", "Devil aKa. StefaN@CSX");
+	register_plugin("Classic VIP-FIROGINAL.RO", "3.0", "Devil aKa. StefaN@CSX");
 	
 	RegisterHam(Ham_Spawn, "player", "Spawn", 1);
 	
@@ -37,8 +48,7 @@ public plugin_init()
 	cvar_start_money = register_cvar("amx_start_money", "8000");
 	cvar_vip_jump = register_cvar("amx_vip_jump", "1" );
 	cvar_hp_kill = register_cvar("amx_vip_addhp", "10");	
-	cvar_ap_kill = register_cvar("amx_vip_addap", "10");
-	
+	cvar_ap_kill = register_cvar("amx_vip_addap", "10");	
 }
 
 public Event_NewRound()
@@ -216,11 +226,21 @@ public Spawn(id)
 }
 
 public client_putinserver(id) 
-{ 
+{
+	new MapName[32]; get_mapname(MapName, sizeof(MapName));
+	
 	set_task(2.0, "in", id);
 	
 	jumpnum[id] = 0;
 	dojump[id] = false;
+	
+	for (new i = 0; i < sizeof (RMaps); i ++)
+	{
+		if(equali (MapName, RMaps[i])) 
+		{
+			remove_user_flags (id, read_flags(REMOVE_FLAGS));
+		}
+	}
 }
 
 public client_disconnect( id )
