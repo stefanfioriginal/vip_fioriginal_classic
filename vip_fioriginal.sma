@@ -20,14 +20,15 @@ new const RMaps [ ] [ ] =
 	"35hp_2",
 	"31hp",
 	"1hp",
-	"100hp"	
+	"100hp"
+	
 };
 
 new cvar_tag, cvar_start_hp, cvar_start_ap, cvar_start_money, cvar_vip_jump, cvar_hp_kill, cvar_ap_kill, jumpnum[33], bool: dojump[33], bool:use[33];
 
 public plugin_init() 
 {
-	register_plugin("Classic VIP-FIROGINAL.RO", "3.0", "Devil aKa. StefaN@CSX");
+	register_plugin("Classic VIP-FIROGINAL.RO", "3.1", "Devil aKa. StefaN@CSX");
 	
 	RegisterHam(Ham_Spawn, "player", "Spawn", 1);
 	
@@ -59,22 +60,22 @@ public Event_NewRound()
 public vip_menu(id) 
 {
 	new menu
-	switch(get_user_flags(id) & VIP_LEVEL_ACCES && cs_get_user_team(id))
+	switch(cs_get_user_team(id))
 	{
 		case CS_TEAM_CT:
 		{
 			menu = menu_create("\y[\rVIP Classic\y] \wMeniu \yVIP", "menu_ammunition");
-			menu_additem(menu, "M4a1\r+\wDeagle\r+\wSet grenazi", "1", VIP_LEVEL_ACCES);
-			menu_additem(menu, "Famas\r+\wDeagle\r+\wSet grenazi", "2", VIP_LEVEL_ACCES);
-			menu_additem(menu, "Awp\r+\wDeagle\r+\wSet grenazi", "3", VIP_LEVEL_ACCES);
+			menu_additem(menu, "M4a1+Deagle+Set grenazi", "1", VIP_LEVEL_ACCES);
+			menu_additem(menu, "Famas+Deagle+Set grenazi", "2", VIP_LEVEL_ACCES);
+			menu_additem(menu, "Awp+Deagle+Set grenazi", "3", VIP_LEVEL_ACCES);
 		}
 	
 		case CS_TEAM_T:
 		{
 			menu = menu_create("\y[\rVIP Classic\y] \wMeniu \yVIP", "menu_ammunition");
-			menu_additem(menu, "Ak47\r+\wDeagle\r+\wSet grenazi", "1", VIP_LEVEL_ACCES);
-			menu_additem(menu, "Galil\r+\wDeagle\r+\wSet grenazi", "2", VIP_LEVEL_ACCES);
-			menu_additem(menu, "Awp\r+\wDeagle\r+\wSet grenazi", "3", VIP_LEVEL_ACCES);
+			menu_additem(menu, "Ak47+Deagle+Set grenazi", "1", VIP_LEVEL_ACCES);
+			menu_additem(menu, "Galil+Deagle+Set grenazi", "2", VIP_LEVEL_ACCES);
+			menu_additem(menu, "Awp+Deagle+Set grenazi", "3", VIP_LEVEL_ACCES);
 		}
 	}
 	menu_display(id, menu, 0)
@@ -226,13 +227,13 @@ public Spawn(id)
 }
 
 public client_putinserver(id) 
-{
-	new MapName[32]; get_mapname(MapName, sizeof(MapName));
-	
+{	
 	set_task(2.0, "in", id);
 	
 	jumpnum[id] = 0;
 	dojump[id] = false;
+
+	new MapName[32]; get_mapname(MapName, sizeof(MapName));
 	
 	for (new i = 0; i < sizeof (RMaps); i ++)
 	{
