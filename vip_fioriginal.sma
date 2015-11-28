@@ -28,7 +28,7 @@ new cvar_tag, cvar_start_hp, cvar_start_ap, cvar_start_money, cvar_vip_jump, cva
 
 public plugin_init() 
 {
-	register_plugin("Classic VIP-FIROGINAL.RO", "3.1", "Devil aKa. StefaN@CSX");
+	register_plugin("Classic VIP-FIROGINAL.RO", "4.0", "Devil aKa. StefaN@CSX");
 	
 	RegisterHam(Ham_Spawn, "player", "Spawn", 1);
 	
@@ -297,17 +297,8 @@ public client_PostThink(id)
 public eDeathMsg()
 {
 	new id_Killer = read_data(1);
-	new id_Attacker = read_data(2);
 	if(is_user_alive(id_Killer))
 	{
-		if(cs_get_user_team(id_Attacker) == CS_TEAM_CT)
-		if(get_user_flags(id_Killer) & VIP_LEVEL_ACCES )
-			{
-				set_user_health(id_Killer, get_user_health(id_Killer) + get_pcvar_num(cvar_hp_kill));
-				set_user_armor(id_Killer, get_user_armor(id_Killer) + get_pcvar_num(cvar_ap_kill));
-			}
-
-		if(cs_get_user_team(id_Attacker) == CS_TEAM_T)
 		if(get_user_flags(id_Killer) & VIP_LEVEL_ACCES )
 			{
 				set_user_health(id_Killer, get_user_health(id_Killer) + get_pcvar_num(cvar_hp_kill));
@@ -396,8 +387,7 @@ public print_adminlist(user)
 		}
 		else 
 	{
-			len += format(message[len], 255-len, "^3[%s] ^1Nu sunt ^4VIP^1-i online.", tag);
-			print_message(user, message);
+			ColorChat(0, GREEN, "^3[%s] ^1Nu sunt ^4VIP^1-i online.", tag);
 	}   
 }
 print_message(id, msg[]) 
