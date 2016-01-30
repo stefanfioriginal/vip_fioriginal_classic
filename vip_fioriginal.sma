@@ -19,16 +19,17 @@ new const RMaps [ ] [ ] =
 	"35hp",
 	"35hp_2",
 	"31hp",
-	"1hp",
-	"100hp"
-	
+	"1hp"	
 };
 
-new cvar_tag, cvar_start_hp, cvar_start_ap, cvar_start_money, cvar_vip_jump, cvar_hp_kill, cvar_ap_kill, jumpnum[33], bool: dojump[33], bool:use[33];
+new const g_szBeginning[ ] = "Membrii VIP"
+new g_szMessage[ 256 ];
+
+new cvar_vip_maxap, cvar_vip_maxhp, cvar_vip_showC, cvar_vip_showH, cvar_vip_in_out, cvar_tag, cvar_start_hp, cvar_start_ap, cvar_start_money, cvar_vip_jump, cvar_hp_kill, cvar_ap_kill, jumpnum[33], bool: dojump[33], bool:use[33], SyncHudMessage;
 
 public plugin_init() 
 {
-	register_plugin("Classic VIP-FIROGINAL.RO", "4.0", "Devil aKa. StefaN@CSX");
+	register_plugin("Classic VIP-FIROGINAL.RO", "5.0", "Devil aKa. StefaN@CSX");
 	
 	RegisterHam(Ham_Spawn, "player", "Spawn", 1);
 	
@@ -37,19 +38,27 @@ public plugin_init()
 	register_clcmd("say", "handle_say");
 	register_clcmd("say_team", "handle_say");
 	
-	set_task(120.0, "mesaj_info", _, _, _, "b");
-	
 	register_event("DeathMsg", "eDeathMsg", "a");
 	register_event("HLTV", "Event_NewRound", "a", "1=0", "2=0");
-	register_message( get_user_msgid( "ScoreAttrib" ), "MessageScoreAttrib" );
-	
+	register_message(get_user_msgid( "ScoreAttrib" ), "MessageScoreAttrib");	
+
 	cvar_tag = register_cvar("amx_vip_tag", "VIP");
 	cvar_start_hp = register_cvar("amx_start_hp", "150");
 	cvar_start_ap = register_cvar("amx_start_ap", "180");
 	cvar_start_money = register_cvar("amx_start_money", "8000");
 	cvar_vip_jump = register_cvar("amx_vip_jump", "1" );
 	cvar_hp_kill = register_cvar("amx_vip_addhp", "10");	
-	cvar_ap_kill = register_cvar("amx_vip_addap", "10");	
+	cvar_ap_kill = register_cvar("amx_vip_addap", "10");
+	cvar_vip_in_out = register_cvar("amx_vip_in_out", "1");
+	cvar_vip_showC = register_cvar("amx_vip_show_chat", "1");
+	cvar_vip_showH = register_cvar("amx_vip_show_hud", "1");
+	cvar_vip_maxhp = register_cvar("amx_vip_maxhp", "180");
+	cvar_vip_maxap = register_cvar("amx_vip_maxap", "200");	
+
+	set_task(120.0, "mesaj_info", _, _, _, "b");
+	set_task( 1.0, "TaskDisplayVips", _, _, _, "b", 0 );
+	SyncHudMessage = CreateHudSyncObj( );
+		
 }
 
 public Event_NewRound()
@@ -108,42 +117,48 @@ public menu_ammunition ( id, menu, item )
 	{
 		case 1:
 	{
+			strip_user_weapons(id)
+			give_item(id, "weapon_knife");	
 			give_item(id, "weapon_m4a1");
 			give_item(id, "weapon_deagle");
 			give_item(id, "weapon_hegrenade");
 			give_item(id, "weapon_flashbang");
 			give_item(id, "weapon_smokegrenade");
+			cs_set_user_bpammo(id, CSW_SMOKEGRENADE, 1);
 			cs_set_user_bpammo(id, CSW_HEGRENADE, 1);
 			cs_set_user_bpammo(id, CSW_FLASHBANG, 2);
-			cs_set_user_bpammo(id, CSW_SMOKEGRENADE, 1);
 			cs_set_user_bpammo(id, CSW_M4A1, 90);
 			cs_set_user_bpammo(id, CSW_DEAGLE, 35);
 			ColorChat(id,GREEN,"^3[%s] ^1Ai ales ^4M4a1^1+^4Deagle^1+^4Set grenazi^1.",tag);
 	}
 		case 2:
 	{
+			strip_user_weapons(id)
+			give_item(id, "weapon_knife");
 			give_item(id, "weapon_famas");
 			give_item(id, "weapon_deagle");
 			give_item(id, "weapon_hegrenade");
 			give_item(id, "weapon_flashbang");
 			give_item(id, "weapon_smokegrenade");
+			cs_set_user_bpammo(id, CSW_SMOKEGRENADE, 1);
 			cs_set_user_bpammo(id, CSW_HEGRENADE, 1);
 			cs_set_user_bpammo(id, CSW_FLASHBANG, 2);
-			cs_set_user_bpammo(id, CSW_SMOKEGRENADE, 1);
 			cs_set_user_bpammo(id, CSW_FAMAS, 90);
 			cs_set_user_bpammo(id, CSW_DEAGLE, 35);
 			ColorChat(id,GREEN,"^3[%s] ^1Ai ales ^4Famas^1+^4Deagle^1+^4Set grenazi^1.",tag);
 	}
 		case 3:
 	{
+			strip_user_weapons(id)
+			give_item(id, "weapon_knife");
 			give_item(id, "weapon_awp");
 			give_item(id, "weapon_deagle");
 			give_item(id, "weapon_hegrenade");
 			give_item(id, "weapon_flashbang");
 			give_item(id, "weapon_smokegrenade");
+			cs_set_user_bpammo(id, CSW_SMOKEGRENADE, 1);
 			cs_set_user_bpammo(id, CSW_HEGRENADE, 1);
 			cs_set_user_bpammo(id, CSW_FLASHBANG, 2);
-			cs_set_user_bpammo(id, CSW_SMOKEGRENADE, 1);
 			cs_set_user_bpammo(id, CSW_AWP, 30);
 			cs_set_user_bpammo(id, CSW_DEAGLE, 35);
 			ColorChat(id,GREEN,"^3[%s] ^1Ai ales ^4Awp^1+^4Deagle^1+^4Set grenazi^1.",tag);
@@ -154,42 +169,48 @@ public menu_ammunition ( id, menu, item )
 	{
 		case 1:
 	{
+			strip_user_weapons(id)
+			give_item(id, "weapon_knife");
 			give_item(id, "weapon_ak47");
 			give_item(id, "weapon_deagle");
 			give_item(id, "weapon_hegrenade");
 			give_item(id, "weapon_flashbang");
 			give_item(id, "weapon_smokegrenade");
+			cs_set_user_bpammo(id, CSW_SMOKEGRENADE, 1);
 			cs_set_user_bpammo(id, CSW_HEGRENADE, 1);
 			cs_set_user_bpammo(id, CSW_FLASHBANG, 2);
-			cs_set_user_bpammo(id, CSW_SMOKEGRENADE, 1);
 			cs_set_user_bpammo(id, CSW_AK47, 90);
 			cs_set_user_bpammo(id, CSW_DEAGLE, 35);
 			ColorChat(id,GREEN,"^3[%s] ^1Ai ales ^4Ak47^1+^4Deagle^1+^4Set grenazi^1.",tag);
 	}      
 		case 2:
 	{
+			strip_user_weapons(id)
+			give_item(id, "weapon_knife");
 			give_item(id, "weapon_galil");
 			give_item(id, "weapon_deagle");
 			give_item(id, "weapon_hegrenade");
 			give_item(id, "weapon_flashbang");
 			give_item(id, "weapon_smokegrenade");
+			cs_set_user_bpammo(id, CSW_SMOKEGRENADE, 1);
 			cs_set_user_bpammo(id, CSW_HEGRENADE, 1);
 			cs_set_user_bpammo(id, CSW_FLASHBANG, 2);
-			cs_set_user_bpammo(id, CSW_SMOKEGRENADE, 1);
 			cs_set_user_bpammo(id, CSW_GALIL, 90);
 			cs_set_user_bpammo(id, CSW_DEAGLE, 35);
 			ColorChat(id,GREEN,"^3[%s] ^1Ai ales ^4Galil^1+^4Deagle^1+^4Set grenazi^1.",tag);
 	}
 		case 3:
 	{
+			strip_user_weapons(id)
+			give_item(id, "weapon_knife");
 			give_item(id, "weapon_awp");
 			give_item(id, "weapon_deagle");
 			give_item(id, "weapon_hegrenade");
 			give_item(id, "weapon_flashbang");
 			give_item(id, "weapon_smokegrenade");
+			cs_set_user_bpammo(id, CSW_SMOKEGRENADE, 1);
 			cs_set_user_bpammo(id, CSW_HEGRENADE, 1);
 			cs_set_user_bpammo(id, CSW_FLASHBANG, 2);
-			cs_set_user_bpammo(id, CSW_SMOKEGRENADE, 1);
 			cs_set_user_bpammo(id, CSW_AWP, 30);
 			cs_set_user_bpammo(id, CSW_DEAGLE, 35);
 			ColorChat(id,GREEN,"^3[%s] ^1Ai ales ^4Awp^1+^4Deagle^1+^4Set grenazi^1.",tag);
@@ -297,6 +318,11 @@ public client_PostThink(id)
 public eDeathMsg()
 {
 	new id_Killer = read_data(1);
+	new VIP_MAXHP = get_pcvar_num(cvar_vip_maxhp);
+	new VIP_MAX_HP = get_user_health(id_Killer);
+	new VIP_MAXAP = get_pcvar_num(cvar_vip_maxap);
+	new VIP_MAX_AP = get_user_armor(id_Killer);
+
 	if(is_user_alive(id_Killer))
 	{
 		if(get_user_flags(id_Killer) & VIP_LEVEL_ACCES )
@@ -305,34 +331,56 @@ public eDeathMsg()
 				set_user_armor(id_Killer, get_user_armor(id_Killer) + get_pcvar_num(cvar_ap_kill));
 			}
 	}
+
+	if(VIP_MAX_HP >= VIP_MAXHP)
+	{
+               	set_user_health(id_Killer, get_pcvar_num(cvar_vip_maxhp));
+		return PLUGIN_HANDLED;
+	}
+	
+	if(VIP_MAX_AP >= VIP_MAXAP)
+	{
+               	set_user_armor(id_Killer, get_pcvar_num(cvar_vip_maxap));
+		return PLUGIN_HANDLED;
+	}
+
+	return PLUGIN_HANDLED;
 }
 
 public in(id) 	
 {
-	new tag[32], name[32];
+	if(get_pcvar_num(cvar_vip_in_out))
+	{
+		new tag[32], name[32];
 
-	get_pcvar_string(cvar_tag, tag, charsmax(tag)); 
-	get_user_name(id, name, charsmax(name)); 
+		get_pcvar_string(cvar_tag, tag, charsmax(tag)); 
+		get_user_name(id, name, charsmax(name)); 
 
-	if(get_user_flags(id) & VIP_LEVEL_ACCES)   
-	{ 
-		ColorChat(0, GREEN, "^3[%s] ^1VIP: ^4%s ^1s-a conectat.", tag, name); 
+		if(get_user_flags(id) & VIP_LEVEL_ACCES)   
+		{ 
+			ColorChat(0, GREEN, "^3[%s] ^1VIP: ^4%s ^1s-a conectat.", tag, name); 
+		}
+		return PLUGIN_HANDLED;
 	}
-	return PLUGIN_HANDLED;
+	return PLUGIN_CONTINUE;
 }
 
 public out(id) 	
-{
-	new tag[32], name[32];
+{	
+	if(get_pcvar_num(cvar_vip_in_out))
+	{
+		new tag[32], name[32];
 
-	get_pcvar_string(cvar_tag, tag, charsmax(tag)); 
-	get_user_name(id, name, charsmax(name)); 
+		get_pcvar_string(cvar_tag, tag, charsmax(tag)); 
+		get_user_name(id, name, charsmax(name)); 
 
-	if(get_user_flags(id) & VIP_LEVEL_ACCES)   
-	{ 
-		ColorChat(0, GREEN, "^3[%s] ^1VIP: ^4%s ^1s-a deconectat.", tag, name); 
+		if(get_user_flags(id) & VIP_LEVEL_ACCES)   
+		{ 
+			ColorChat(0, GREEN, "^3[%s] ^1VIP: ^4%s ^1s-a deconectat.", tag, name); 
+		}
+		return PLUGIN_HANDLED;
 	}
-	return PLUGIN_HANDLED;
+	return PLUGIN_CONTINUE;
 }
 
 public vip_info(id)
@@ -348,6 +396,46 @@ public mesaj_info()
 	ColorChat(0, GREEN, "^3[%s] ^1Tastati in chat ^4/vip ^1pentru a vedea beneficiile si pretul vip-ului.", tag);
 }
 
+public TaskDisplayVips( )
+{
+	if(get_pcvar_num(cvar_vip_showH))
+	{
+		static iPlayers[ 32 ];
+		static iPlayersNum;
+	
+		get_players( iPlayers, iPlayersNum, "ch" );
+		if( !iPlayersNum )
+			return 1;
+	
+		static iVipsConnected, szVipsNames[ 128 ], szName[ 32 ];
+		formatex( szVipsNames, sizeof ( szVipsNames ) -1, "" ); // Is this needed ?
+		iVipsConnected = 0;
+	
+		static id, i;
+		for( i = 0; i < iPlayersNum; i++ )
+		{
+			id = iPlayers[ i ];
+			if( get_user_flags( id ) & VIP_LEVEL_ACCES )
+			{
+				get_user_name( id, szName, sizeof ( szName ) -1 );
+			
+				add( szVipsNames, sizeof ( szVipsNames ) -1, szName );
+				add( szVipsNames, sizeof ( szVipsNames ) -1, "^n" );
+			
+				iVipsConnected++;
+			}
+		}
+	
+		formatex( g_szMessage, sizeof ( g_szMessage ) -1, "%s ( %i )^n%s",
+			g_szBeginning, iVipsConnected, szVipsNames );
+		
+		set_hudmessage( 25, 255, 25, 0.01, 0.25, 0, 0.0, 1.0, 0.1, 0.1, -1 );
+		ShowSyncHudMsg( 0, SyncHudMessage, g_szMessage );
+	}
+	return PLUGIN_CONTINUE;
+		
+}
+
 public handle_say(id) 
 {
 	new said[192];
@@ -359,37 +447,42 @@ public handle_say(id)
 
 public print_adminlist(user) 
 {
-	new tag[32];
-	get_pcvar_string(cvar_tag, tag, charsmax(tag));
-	
-	new adminnames[33][32];
-	new message[256];
-	new id, count, x, len;
-    
-	for(id = 1 ; id <= get_maxplayers() ; id++)
-		if(is_user_connected(id))
-			if(get_user_flags(id) & VIP_LEVEL_ACCES)
-				get_user_name(id, adminnames[count++], charsmax(adminnames[ ]));
-    
-	len = format(message, 255, "^3[%s] ^1VIP-ii online sunt:^4 " ,tag);
-	if(count > 0) 
-		{
-		for(x = 0 ; x < count ; x++) 
-		{
-			len += format(message[len], 255-len, "%s%s ", adminnames[x], x < (count-1) ? ", ":"");
-			if(len > 96) 
-			{
-				print_message(user, message);
-				len = format(message, 255, " ");
-			}
-		}
-		print_message(user, message);
-		}
-		else 
+	if(get_pcvar_num(cvar_vip_showC))
 	{
+		new tag[32];
+		get_pcvar_string(cvar_tag, tag, charsmax(tag));
+	
+		new adminnames[33][32];
+		new message[256];
+		new id, count, x, len;
+
+		for(id = 1 ; id <= get_maxplayers() ; id++)
+			if(is_user_connected(id))
+				if(get_user_flags(id) & VIP_LEVEL_ACCES)
+					get_user_name(id, adminnames[count++], charsmax(adminnames[ ]));
+    
+		len = format(message, 255, "^3[%s] ^1VIP-ii online sunt:^4 " ,tag);
+		if(count > 0) 
+			{
+			for(x = 0 ; x < count ; x++) 
+				{
+				len += format(message[len], 255-len, "%s%s ", adminnames[x], x < (count-1) ? ", ":"");
+				if(len > 96) 
+				{
+					print_message(user, message);
+					len = format(message, 255, " ");
+				}
+				}
+			print_message(user, message);
+			}
+		else 
+		{
 			ColorChat(0, GREEN, "^3[%s] ^1Nu sunt ^4VIP^1-i online.", tag);
-	}   
+		} 
+	}
+	return PLUGIN_CONTINUE;  
 }
+
 print_message(id, msg[]) 
 {
 	message_begin(MSG_ONE, get_user_msgid("SayText"), {0,0,0}, id);
