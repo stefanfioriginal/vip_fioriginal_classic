@@ -19,7 +19,8 @@ new const RMaps [ ] [ ] =
 	"35hp",
 	"35hp_2",
 	"31hp",
-	"1hp"	
+	"1hp",
+	"100hp"
 };
 
 new const g_szBeginning[ ] = "Membrii VIP"
