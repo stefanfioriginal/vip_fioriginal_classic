@@ -69,6 +69,9 @@ public Event_NewRound()
 
 public vip_menu(id) 
 {
+	if(!is_user_alive(id))
+		return;
+		
 	new menu
 	switch(cs_get_user_team(id))
 	{
