@@ -74,6 +74,9 @@ public Event_NewRound()
 
 public vip_menu(id) 
 {
+	if(!is_user_alive(id))
+		return;
+		
 	if( !(get_user_flags(id) & VIP_LEVEL_ACCES) )
 		return;
 	
