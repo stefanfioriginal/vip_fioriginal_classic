@@ -92,7 +92,6 @@ public vip_menu(id)
 		}
 	}
 	menu_display(id, menu, 0)
-	return PLUGIN_HANDLED;
 }
 
 public menu_ammunition ( id, menu, item ) 
