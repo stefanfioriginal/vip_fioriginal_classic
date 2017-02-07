@@ -30,7 +30,7 @@ new cvar_vip_maxap, cvar_vip_maxhp, cvar_vip_showC, cvar_vip_showH, cvar_vip_in_
 
 public plugin_init() 
 {
-	register_plugin("Classic VIP-FIROGINAL.RO", "5.0", "Devil aKa. StefaN@CSX");
+	register_plugin("Classic VIP-FIROGINAL.RO", "5.0.1", "Devil aKa. StefaN@CSX");
 	
 	RegisterHam(Ham_Spawn, "player", "Spawn", 1);
 	
@@ -248,6 +248,15 @@ public Spawn(id)
 		}
 	    }
 	}
+	
+	new MapName[32]; get_mapname(MapName, sizeof(MapName));
+	for (new i = 0; i < sizeof (RMaps); i ++)
+	{
+		if(equali (MapName, RMaps[i])) 
+		{
+			remove_user_flags (id, read_flags(REMOVE_FLAGS));
+		}
+	}
 }
 
 public client_putinserver(id) 
@@ -256,16 +265,6 @@ public client_putinserver(id)
 	
 	jumpnum[id] = 0;
 	dojump[id] = false;
-
-	new MapName[32]; get_mapname(MapName, sizeof(MapName));
-	
-	for (new i = 0; i < sizeof (RMaps); i ++)
-	{
-		if(equali (MapName, RMaps[i])) 
-		{
-			remove_user_flags (id, read_flags(REMOVE_FLAGS));
-		}
-	}
 }
 
 public client_disconnect( id )
