@@ -3,7 +3,8 @@
 #include <fun>
 #include <hamsandwich>
 #include <engine>
-#include <ColorChat>
+#include <fakemeta>
+#include <colorchat>
 
 #define VIP_LEVEL_ACCES ADMIN_LEVEL_F
 
@@ -24,13 +25,16 @@ new const RMaps [ ] [ ] =
 };
 
 new const g_szBeginning[ ] = "Membrii VIP"
-new g_szMessage[ 256 ];
 
+const PRIMARY_WEAPONS_BIT_SUM = (1<<CSW_SCOUT)|(1<<CSW_XM1014)|(1<<CSW_MAC10)|(1<<CSW_AUG)|(1<<CSW_UMP45)|(1<<CSW_SG550)|(1<<CSW_GALIL)|(1<<CSW_FAMAS)|(1<<CSW_AWP)|(1<<CSW_MP5NAVY)|(1<<CSW_M249)|(1<<CSW_M3)|(1<<CSW_M4A1)|(1<<CSW_TMP)|(1<<CSW_G3SG1)|(1<<CSW_SG552)|(1<<CSW_AK47)|(1<<CSW_P90);
+const SECONDARY_WEAPONS_BIT_SUM = (1<<CSW_P228)|(1<<CSW_ELITE)|(1<<CSW_FIVESEVEN)|(1<<CSW_USP)|(1<<CSW_GLOCK18)|(1<<CSW_DEAGLE);
+
+new g_szMessage[ 256 ];
 new cvar_vip_maxap, cvar_vip_maxhp, cvar_vip_showC, cvar_vip_showH, cvar_vip_in_out, cvar_tag, cvar_start_hp, cvar_start_ap, cvar_start_money, cvar_vip_jump, cvar_hp_kill, cvar_ap_kill, jumpnum[33], bool: dojump[33], SyncHudMessage, contor;
 
 public plugin_init() 
 {
-	register_plugin("Classic VIP-FIROGINAL.RO", "5.1.1", "Devil aKa. StefaN@CSX");
+	register_plugin("Classic VIP-FIROGINAL.RO", "5.1.2", "Devil aKa. StefaN@CSX");
 	
 	RegisterHam(Ham_Spawn, "player", "Spawn", 1);
 	
@@ -73,10 +77,7 @@ public Event_NewRound()
 }
 
 public vip_menu(id) 
-{
-	if(!is_user_alive(id))
-		return;
-		
+{	
 	if( !(get_user_flags(id) & VIP_LEVEL_ACCES) )
 		return;
 	
@@ -122,7 +123,8 @@ public menu_ammunition ( id, menu, item )
 	{
 		case 1:
 	{
-			strip_user_weapons(id)
+			drop_weapons(id, 1)
+			drop_weapons(id, 2)
 			give_item(id, "weapon_knife");	
 			give_item(id, "weapon_m4a1");
 			give_item(id, "weapon_deagle");
@@ -136,7 +138,8 @@ public menu_ammunition ( id, menu, item )
 	}
 		case 2:
 	{
-			strip_user_weapons(id)
+			drop_weapons(id, 1)
+			drop_weapons(id, 2)
 			give_item(id, "weapon_knife");
 			give_item(id, "weapon_famas");
 			give_item(id, "weapon_deagle");
@@ -150,7 +153,8 @@ public menu_ammunition ( id, menu, item )
 	}
 		case 3:
 	{
-			strip_user_weapons(id)
+			drop_weapons(id, 1)
+			drop_weapons(id, 2)
 			give_item(id, "weapon_knife");
 			give_item(id, "weapon_awp");
 			give_item(id, "weapon_deagle");
@@ -168,7 +172,8 @@ public menu_ammunition ( id, menu, item )
 	{
 		case 1:
 	{
-			strip_user_weapons(id)
+			drop_weapons(id, 1)
+			drop_weapons(id, 2)
 			give_item(id, "weapon_knife");
 			give_item(id, "weapon_ak47");
 			give_item(id, "weapon_deagle");
@@ -182,7 +187,8 @@ public menu_ammunition ( id, menu, item )
 	}      
 		case 2:
 	{
-			strip_user_weapons(id)
+			drop_weapons(id, 1)
+			drop_weapons(id, 2)
 			give_item(id, "weapon_knife");
 			give_item(id, "weapon_galil");
 			give_item(id, "weapon_deagle");
@@ -196,7 +202,8 @@ public menu_ammunition ( id, menu, item )
 	}
 		case 3:
 	{
-			strip_user_weapons(id)
+			drop_weapons(id, 1)
+			drop_weapons(id, 2)
 			give_item(id, "weapon_knife");
 			give_item(id, "weapon_awp");
 			give_item(id, "weapon_deagle");
@@ -490,4 +497,30 @@ public MessageScoreAttrib(iMsgID, iDest, iReceiver)
 		{
         		set_msg_arg_int(2, ARG_BYTE, is_user_alive(iPlayer) ? SCOREATTRIB_VIP : SCOREATTRIB_DEAD);
     		}
+}
+
+stock fm_find_ent_by_owner ( entity, const classname[], owner )
+{
+	while((entity = engfunc(EngFunc_FindEntityByString, entity, "classname", classname)) && pev(entity, pev_owner) != owner) {  }
+	return entity;
+}
+
+stock drop_weapons(id, dropwhat)
+{
+	static Weapons[32], Num, i, WeaponID;
+	Num = 0;
+	get_user_weapons(id, Weapons, Num);
+	for(i = 0; i < Num; i ++)
+	{
+		WeaponID = Weapons[i];
+		if((dropwhat == 1 && ((1 << WeaponID) & PRIMARY_WEAPONS_BIT_SUM)) || (dropwhat == 2 && ((1 << WeaponID) & SECONDARY_WEAPONS_BIT_SUM )))
+		{
+			static DropName[32], WeaponEntity;
+			get_weaponname(WeaponID, DropName, charsmax(DropName));
+			WeaponEntity = fm_find_ent_by_owner(-1, DropName, id);
+			set_pev(WeaponEntity, pev_iuser1, cs_get_user_bpammo (id, WeaponID));
+			engclient_cmd(id, "drop", DropName);
+			cs_set_user_bpammo(id, WeaponID, 0);
+		}
+	}
 }
