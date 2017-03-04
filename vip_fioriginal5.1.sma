@@ -134,7 +134,7 @@ public menu_ammunition ( id, menu, item )
 			cs_set_user_bpammo(id, CSW_FLASHBANG, 2);
 			cs_set_user_bpammo(id, CSW_M4A1, 90);
 			cs_set_user_bpammo(id, CSW_DEAGLE, 35);
-			ColorChat(id,GREEN,"^4%s ^1Ai ales ^4M4a1^1+^4Deagle^1+^4Set grenazi^1.",tag);
+			ColorChat(id,GREEN,"^4[%s] ^1Ai ales ^4M4a1^1+^4Deagle^1+^4Set grenazi^1.",tag);
 	}
 		case 2:
 	{
@@ -149,7 +149,7 @@ public menu_ammunition ( id, menu, item )
 			cs_set_user_bpammo(id, CSW_FLASHBANG, 2);
 			cs_set_user_bpammo(id, CSW_FAMAS, 90);
 			cs_set_user_bpammo(id, CSW_DEAGLE, 35);
-			ColorChat(id,GREEN,"^4%s ^1Ai ales ^4Famas^1+^4Deagle^1+^4Set grenazi^1.",tag);
+			ColorChat(id,GREEN,"^4[%s] ^1Ai ales ^4Famas^1+^4Deagle^1+^4Set grenazi^1.",tag);
 	}
 		case 3:
 	{
@@ -164,7 +164,7 @@ public menu_ammunition ( id, menu, item )
 			cs_set_user_bpammo(id, CSW_FLASHBANG, 2);
 			cs_set_user_bpammo(id, CSW_AWP, 30);
 			cs_set_user_bpammo(id, CSW_DEAGLE, 35);
-			ColorChat(id,GREEN,"^4%s ^1Ai ales ^4Awp^1+^4Deagle^1+^4Set grenazi^1.",tag);
+			ColorChat(id,GREEN,"^4[%s] ^1Ai ales ^4Awp^1+^4Deagle^1+^4Set grenazi^1.",tag);
 	}      
 }
 	if(cs_get_user_team(id) == CS_TEAM_T)
@@ -183,7 +183,7 @@ public menu_ammunition ( id, menu, item )
 			cs_set_user_bpammo(id, CSW_FLASHBANG, 2);
 			cs_set_user_bpammo(id, CSW_AK47, 90);
 			cs_set_user_bpammo(id, CSW_DEAGLE, 35);
-			ColorChat(id,GREEN,"^4%s ^1Ai ales ^4Ak47^1+^4Deagle^1+^4Set grenazi^1.",tag);
+			ColorChat(id,GREEN,"^4[%s] ^1Ai ales ^4Ak47^1+^4Deagle^1+^4Set grenazi^1.",tag);
 	}      
 		case 2:
 	{
@@ -198,7 +198,7 @@ public menu_ammunition ( id, menu, item )
 			cs_set_user_bpammo(id, CSW_FLASHBANG, 2);
 			cs_set_user_bpammo(id, CSW_GALIL, 90);
 			cs_set_user_bpammo(id, CSW_DEAGLE, 35);
-			ColorChat(id,GREEN,"^4%s ^1Ai ales ^4Galil^1+^4Deagle^1+^4Set grenazi^1.",tag);
+			ColorChat(id,GREEN,"^4[%s] ^1Ai ales ^4Galil^1+^4Deagle^1+^4Set grenazi^1.",tag);
 	}
 		case 3:
 	{
@@ -213,7 +213,7 @@ public menu_ammunition ( id, menu, item )
 			cs_set_user_bpammo(id, CSW_FLASHBANG, 2);
 			cs_set_user_bpammo(id, CSW_AWP, 30);
 			cs_set_user_bpammo(id, CSW_DEAGLE, 35);
-			ColorChat(id,GREEN,"^4%s ^1Ai ales ^4Awp^1+^4Deagle^1+^4Set grenazi^1.",tag);
+			ColorChat(id,GREEN,"^4[%s] ^1Ai ales ^4Awp^1+^4Deagle^1+^4Set grenazi^1.",tag);
 	}      
 	}
 	menu_destroy(menu);
@@ -356,7 +356,7 @@ public in(id)
 
 		if(get_user_flags(id) & VIP_LEVEL_ACCES)   
 		{ 
-			ColorChat(0, GREEN, "^4%s ^1VIP: ^4%s ^1s-a conectat.", tag, name); 
+			ColorChat(0, GREEN, "^4[%s] ^1VIP: ^4%s ^1s-a conectat.", tag, name); 
 		}
 		return PLUGIN_HANDLED;
 	}
@@ -374,7 +374,7 @@ public out(id)
 
 		if(get_user_flags(id) & VIP_LEVEL_ACCES)   
 		{ 
-			ColorChat(0, GREEN, "^4%s ^1VIP: ^4%s ^1s-a deconectat.", tag, name); 
+			ColorChat(0, GREEN, "^4[%s] ^1VIP: ^4%s ^1s-a deconectat.", tag, name); 
 		}
 		return PLUGIN_HANDLED;
 	}
@@ -391,7 +391,7 @@ public mesaj_info()
 	new tag[32];
 	get_pcvar_string(cvar_tag, tag, charsmax(tag));
 	
-	ColorChat(0, GREEN, "^4%s ^1Tastati in chat ^4/vip ^1pentru a vedea beneficiile si pretul vip-ului.", tag);
+	ColorChat(0, GREEN, "^4[%s] ^1Tastati in chat ^4/vip ^1pentru a vedea beneficiile si pretul vip-ului.", tag);
 }
 
 public TaskDisplayVips( )
@@ -459,7 +459,7 @@ public print_adminlist(user)
 				if(get_user_flags(id) & VIP_LEVEL_ACCES)
 					get_user_name(id, adminnames[count++], charsmax(adminnames[ ]));
     
-		len = format(message, 255, "^4%s ^1VIP-ii online sunt:^4 " ,tag);
+		len = format(message, 255, "^4[%s] ^1VIP-ii online sunt:^4 " ,tag);
 		if(count > 0) 
 			{
 			for(x = 0 ; x < count ; x++) 
@@ -475,7 +475,7 @@ public print_adminlist(user)
 			}
 		else 
 		{
-			ColorChat(0, GREEN, "^4%s ^1Nu sunt ^4VIP^1-i online.", tag);
+			ColorChat(0, GREEN, "^4[%s] ^1Nu sunt ^4VIP^1-i online.", tag);
 		} 
 	}
 	return PLUGIN_CONTINUE;  
